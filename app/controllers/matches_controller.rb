@@ -30,7 +30,12 @@ class MatchesController < ApplicationController
     @match = Match.find(params[:id])
 
     if @match.update(match_params)
-      redirect_to @match
+      # redirect_to @match
+      ActionCable.server.broadcast 'gameroom_channel',
+                                   gameboard:  @match.gameboard,
+                                   gamestatus: @match.gamestatus,
+                                   currentplayer: @match.currentplayer
+      head :ok
     else
       render 'edit'
     end

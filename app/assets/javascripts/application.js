@@ -14,3 +14,11 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+//= require_tree ./channels
+
+$(document).ready(function () {
+  $('.testtest').on('click', function () {
+    console.log('potato')
+    printData()
+  })
+})
