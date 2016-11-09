@@ -1,0 +1,21 @@
+<%= form_for @match do |f| %>
+<p>
+  <%= f.label :gameboard %><br>
+  <%= f.text_field :gameboard %>
+</p>
+
+<p>
+  <%= f.label :gamestatus %><br>
+  <%= f.text_field :gamestatus %>
+</p>
+
+<p>
+  <%= f.label :currentplayer %><br>
+  <%= f.text_field :currentplayer %>
+</p>
+
+<p>
+  <%= f.submit %>
+</p>
+
+<% end %>
