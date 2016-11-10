@@ -26,7 +26,33 @@ App.gameroom = App.cable.subscriptions.create('GameroomChannel', {
   }
 })
 
+var gameBoard = [
+    ['0', '0', '0', '0', '0', '0'],
+    ['0', '0', '0', '0', '0', '0'],
+    ['0', '0', '0', '0', '0', '0'],
+    ['0', '0', '0', '0', '0', '0'],
+    ['0', '0', '0', '0', '0', '0'],
+    ['0', '0', '0', '0', '0', '0']
+  ]
+
+var gameRound = {
+    'currentPlayer': 'X',
+    'playing': true,
+    'X': {
+      'fiveInARow': false
+    },
+    'O': {
+      'fiveInARow': false
+    }
+  }
+
 $(document).ready(function () {
+  strToGameBoardArray($('#match_gameboard').val())
+  populateGameBoard('board0')
+  populateGameBoard('board1')
+  populateGameBoard('board2')
+  populateGameBoard('board3')
+
   $('.game-board-form').submit(function () {
     var valuesToSubmit = $(this).serializeArray()
     $.ajax({
@@ -38,18 +64,8 @@ $(document).ready(function () {
     return false
   })
 
-  var gameRound = {
-    'currentPlayer': 'X',
-    'playing': true,
-    'X': {
-      'fiveInARow': false
-    },
-    'O': {
-      'fiveInARow': false
-    }
-  }
-
   var $allGameSquare = $('.game-square')
+
   function addGameSquareListener () {
     $allGameSquare.off()
     for (var i = 0; i < $allGameSquare.length; i++) {
@@ -59,6 +75,7 @@ $(document).ready(function () {
       }
     }
   }
+
   addGameSquareListener()
 
   function addRotateButtonListener () {
@@ -67,13 +84,14 @@ $(document).ready(function () {
       var $rotateRightBtn = $('#rotate-right-' + i)
       var $rotateLeftBtn = $('#rotate-left-' + i)
 
-      var rotateBoardRight = getGameTileData('board' + i, 'right')
-      var rotateBoardLeft = getGameTileData('board' + i, 'left')
+      var rotateBoardRight = rotateButtonFunction('board' + i, 'right')
+      var rotateBoardLeft = rotateButtonFunction('board' + i, 'left')
 
       $rotateRightBtn.on('click', rotateBoardRight)
       $rotateLeftBtn.on('click', rotateBoardLeft)
     }
   }
+
   addRotateButtonListener()
 
   function placeToken () {
@@ -87,12 +105,12 @@ $(document).ready(function () {
       gameBoard[xCoord][yCoord] = gameRound.currentPlayer
       $(this).addClass(gameRound.currentPlayer)
 
-      // checkWinCondition(xCoord, yCoord)
-      gameboardToFormInputAndSubmit()
+      checkWinCondition(xCoord, yCoord)
+      updateFormInputAndSubmit()
     }
   }
 
-  function getGameTileData (boardIndex, rotateDirection) {
+  function rotateButtonFunction (boardIndex, rotateDirection) {
     var x = 0
     var y = 0
     var gameTileID
@@ -170,11 +188,12 @@ $(document).ready(function () {
           }
           // counter to loop through the gameSquareTile array
           counter += 1
-          // checkWinCondition(i, j)
+          checkWinCondition(i, j)
         }
       }
-      gameboardToFormInputAndSubmit()
       togglePlayer()
+      updateFormInputAndSubmit()
+      addGameSquareListener()
     }
     return rotateBoard
   }
@@ -187,16 +206,97 @@ $(document).ready(function () {
     }
   }
 
-})
+  function countMatchesOneDirection (xCoord, yCoord, direction) {
+    var xAdjust = 0
+    var yAdjust = 0
 
-var gameBoard = [
-                  ['0', '0', '0', '0', '0', '0'],
-                  ['0', '0', '0', '0', '0', '0'],
-                  ['0', '0', '0', '0', '0', '0'],
-                  ['0', '0', '0', '0', '0', '0'],
-                  ['0', '0', '0', '0', '0', '0'],
-                  ['0', '0', '0', '0', '0', '0']
-]
+    switch (direction) {
+      case 'vertical':
+        xAdjust = 1
+        yAdjust = 0
+        break
+      case 'horizontal':
+        xAdjust = 0
+        yAdjust = 1
+        break
+      case 'upDiagonal':
+        xAdjust = -1
+        yAdjust = 1
+        break
+      case 'downDiagonal':
+        xAdjust = -1
+        yAdjust = -1
+        break
+      default:
+        xAdjust = 0
+        yAdjust = 0
+    }
+
+    var totalMatches = 0
+
+    function countMatchesHalfDirection (xCoord, yCoord, xAdjust, yAdjust, direction) {
+      if (direction === 'backward') {
+        xAdjust *= -1
+        yAdjust *= -1
+      }
+
+      var playerMove = gameBoard[xCoord][yCoord]
+      var nextX = xCoord + xAdjust
+      var nextY = yCoord + yAdjust
+
+      if (nextX >= 0 && nextX <= 5 && nextY >= 0 && nextY <= 5) {
+        if (playerMove === gameBoard[nextX][nextY] && (playerMove === 'X' || playerMove === 'O')) {
+          totalMatches += 1
+          countMatchesHalfDirection(nextX, nextY, xAdjust, yAdjust)
+        } else {
+          return
+        }
+      }
+    }
+
+    countMatchesHalfDirection(xCoord, yCoord, xAdjust, yAdjust, 'forward')
+    countMatchesHalfDirection(xCoord, yCoord, xAdjust, yAdjust, 'backward')
+
+    if (totalMatches >= 4) {
+      gameRound[gameRound.currentPlayer].fiveInARow = true
+    }
+  }
+
+  function checkWinCondition (thisRow, thisCol) {
+    countMatchesOneDirection(thisRow, thisCol, 'vertical')
+    countMatchesOneDirection(thisRow, thisCol, 'horizontal')
+    countMatchesOneDirection(thisRow, thisCol, 'upDiagonal')
+    countMatchesOneDirection(thisRow, thisCol, 'downDiagonal')
+
+    var filledGameSquares = 0
+    for (var i = 0; i < $allGameSquare.length; i++) {
+      if ($('.game-square').eq(i).hasClass('X') || $('.game-square').eq(i).hasClass('O')) {
+        filledGameSquares += 1
+      }
+    }
+
+    if (gameRound.X.fiveInARow && gameRound.O.fiveInARow) {
+      alert('TIE')
+    } else if (gameRound.X.fiveInARow) {
+      alert('X WIN')
+    } else if (gameRound.O.fiveInARow) {
+      alert('O WIN')
+    } else if (filledGameSquares === 36) {
+      alert('TIE')
+    }
+  }
+
+  function updateFormInputAndSubmit () {
+    var str = ''
+    for (var i = 0; i < 6; i++) {
+      str += gameBoard[i].join('')
+    }
+
+    $('#match_gameboard').val(str)
+    $('#match_currentplayer').val(gameRound.currentPlayer)
+    $('.game-board-form').submit()
+  }
+})
 
 function populateGameBoard (gametile) {
   var x = 0
@@ -251,95 +351,5 @@ function strToGameBoardArray (str) {
       gameBoard[i][j] = str[counter]
       counter += 1
     }
-  }
-}
-
-function gameboardToFormInputAndSubmit () {
-  var str = ''
-  for (var i = 0; i < 6; i++) {
-    str += gameBoard[i].join('')
-  }
-
-  $('#match_gameboard').val(str)
-  $('.game-board-form').submit()
-}
-
-function countMatchesOneDirection (xCoord, yCoord, direction) {
-  var xAdjust = 0
-  var yAdjust = 0
-
-  switch (direction) {
-    case 'vertical':
-      xAdjust = 1
-      yAdjust = 0
-      break
-    case 'horizontal':
-      xAdjust = 0
-      yAdjust = 1
-      break
-    case 'upDiagonal':
-      xAdjust = -1
-      yAdjust = 1
-      break
-    case 'downDiagonal':
-      xAdjust = -1
-      yAdjust = -1
-      break
-    default:
-      xAdjust = 0
-      yAdjust = 0
-  }
-
-  var totalMatches = 0
-
-  function countMatchesHalfDirection (xCoord, yCoord, xAdjust, yAdjust, direction) {
-    if (direction === 'backward') {
-      xAdjust *= -1
-      yAdjust *= -1
-    }
-
-    var playerMove = gameBoard[xCoord][yCoord]
-    var nextX = xCoord + xAdjust
-    var nextY = yCoord + yAdjust
-
-    if (nextX >= 0 && nextX <= 5 && nextY >= 0 && nextY <= 5) {
-      if (playerMove === gameBoard[nextX][nextY] && playerMove) {
-        totalMatches += 1
-        countMatchesHalfDirection(nextX, nextY, xAdjust, yAdjust)
-      } else {
-        return
-      }
-    }
-  }
-
-  countMatchesHalfDirection(xCoord, yCoord, xAdjust, yAdjust, 'forward')
-  countMatchesHalfDirection(xCoord, yCoord, xAdjust, yAdjust, 'backward')
-
-  if (totalMatches >= 4) {
-    gameRound[gameRound.currentPlayer].fiveInARow = true
-  }
-}
-
-function checkWinCondition (thisRow, thisCol) {
-  countMatchesOneDirection(thisRow, thisCol, 'vertical')
-  countMatchesOneDirection(thisRow, thisCol, 'horizontal')
-  countMatchesOneDirection(thisRow, thisCol, 'upDiagonal')
-  countMatchesOneDirection(thisRow, thisCol, 'downDiagonal')
-
-  var filledGameSquares = 0
-  for (var i = 0; i < $allGameSquare.length; i++) {
-    if ($('.game-square').eq(i).hasClass('X') || $('.game-square').eq(i).hasClass('O')) {
-      filledGameSquares += 1
-    }
-  }
-
-  if (gameRound.X.fiveInARow && gameRound.O.fiveInARow) {
-    alert('TIE')
-  } else if (gameRound.X.fiveInARow) {
-    alert('X WIN')
-  } else if (gameRound.O.fiveInARow) {
-    alert('O WIN')
-  } else if (filledGameSquares === 36) {
-    alert('TIE')
   }
 }

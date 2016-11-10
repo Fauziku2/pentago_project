@@ -4,6 +4,9 @@ class CreateMatches < ActiveRecord::Migration[5.0]
       t.string :gameboard, default: '000000000000000000000000000000000000'
       t.string :gamestatus, default: 'playing'
       t.string :currentplayer, default: 'X'
+      t.string :playerx
+      t.string :playero
+      t.string :outcome
 
       t.timestamps
     end

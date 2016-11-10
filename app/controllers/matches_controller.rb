@@ -32,15 +32,13 @@ class MatchesController < ApplicationController
       ActionCable.server.broadcast 'gameroom_channel',
                                    gameboard:  @match.gameboard,
                                    gamestatus: @match.gamestatus,
-                                   currentplayer: @match.currentplayer
+                                   currentplayer: @match.currentplayer,
+                                   playerx:  @match.playerx,
+                                   playero: @match.playero,
+                                   outcome: @match.outcome
       head :ok
     end
   end
-
-#   respond_to do |format|
-#   format.html
-#   format.json
-# end
 
   def destroy
     @match = Match.find(params[:id])
@@ -51,7 +49,7 @@ class MatchesController < ApplicationController
 
   private
   def match_params
-    params.require(:match).permit(:gameboard, :gamestatus, :currentplayer)
+    params.require(:match).permit(:gameboard, :gamestatus, :currentplayer, :playerx, :playero, :outcome)
   end
 
 end

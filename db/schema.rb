@@ -16,6 +16,9 @@ ActiveRecord::Schema.define(version: 20161109112801) do
     t.string   "gameboard",     default: "000000000000000000000000000000000000"
     t.string   "gamestatus",    default: "playing"
     t.string   "currentplayer", default: "X"
+    t.string   "playerx"
+    t.string   "playero"
+    t.string   "outcome"
     t.datetime "created_at",                                                     null: false
     t.datetime "updated_at",                                                     null: false
   end
