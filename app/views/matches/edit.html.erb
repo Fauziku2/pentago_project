@@ -1,13 +1,13 @@
 <ul class="listlist">
-  <li><%= @match.id %></li>
-  <li><%= @match.gameboard %></li>
-  <li><%= @match.gamestatus %></li>
-  <li><%= @match.currentplayer %></li>
+  <h5 class='gameboardfield'><%= @match.id %></h5>
+  <h5 class='gameboardfield'><%= @match.gameboard %></h5>
+  <h5 class='gameboardfield'><%= @match.gamestatus %></h5>
+  <h5 class='gameboardfield'><%= @match.currentplayer %></h5>
 </ul>
 
 <p class="gameboardarray"></p>
 
-<%= form_for @match, :remote => true do |f| %>
+<%= form_for @match, :html => {:class => 'update-game-board'}, :remote => true do |f| %>
   <p>
     <%= f.label :gameboard %><br>
     <%= f.text_field :gameboard %>
@@ -29,7 +29,7 @@
 
 <%= link_to 'Back', matches_path %>
 
-<!--
+
 <div class="game-board-container">
 
 <div class="top-btn-container">
@@ -100,4 +100,4 @@
     </div>
 </div>
 
-</div> -->
+</div>

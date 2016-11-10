@@ -1,5 +1,4 @@
 class MatchesController < ApplicationController
-  # respond_to :json
   def index
     @matches = Match.all
   end
@@ -27,8 +26,6 @@ class MatchesController < ApplicationController
   end
 
   def update
-    # debugger
-    # puts params
     @match = Match.find(params[:id])
 
     if @match.update(match_params)
@@ -36,8 +33,7 @@ class MatchesController < ApplicationController
                                    gameboard:  @match.gameboard,
                                    gamestatus: @match.gamestatus,
                                    currentplayer: @match.currentplayer
-      # head :ok
-      # render 'edit'
+      head :ok
     end
   end
 
