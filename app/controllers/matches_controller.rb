@@ -1,5 +1,5 @@
 class MatchesController < ApplicationController
-
+  # respond_to :json
   def index
     @matches = Match.all
   end
@@ -27,19 +27,24 @@ class MatchesController < ApplicationController
   end
 
   def update
+    # debugger
+    # puts params
     @match = Match.find(params[:id])
 
     if @match.update(match_params)
-      # redirect_to @match
       ActionCable.server.broadcast 'gameroom_channel',
                                    gameboard:  @match.gameboard,
                                    gamestatus: @match.gamestatus,
                                    currentplayer: @match.currentplayer
-      head :ok
-    else
-      render 'edit'
+      # head :ok
+      # render 'edit'
     end
   end
+
+#   respond_to do |format|
+#   format.html
+#   format.json
+# end
 
   def destroy
     @match = Match.find(params[:id])
