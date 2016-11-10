@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get 'chat_rooms/index'
+
+  get 'chat_rooms/new'
+
+  get 'chat_rooms/create'
+
   devise_for :users, path: '', path_names: {
   sign_in: 'login',
   sign_out: 'logout',
