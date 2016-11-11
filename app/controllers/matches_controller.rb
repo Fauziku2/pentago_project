@@ -29,13 +29,13 @@ class MatchesController < ApplicationController
     @match = Match.find(params[:id])
 
     if @match.update(match_params)
-      ActionCable.server.broadcast 'gameroom_channel',
+      ActionCable.server.broadcast "gameroom_channel_#{@match.id}",
                                    gameboard:  @match.gameboard,
-                                   gamestatus: @match.gamestatus,
                                    currentplayer: @match.currentplayer,
                                    playerx:  @match.playerx,
                                    playero: @match.playero,
-                                   outcome: @match.outcome
+                                   outcome: @match.outcome,
+                                   winner: @match.winner
       head :ok
     end
   end
@@ -49,7 +49,7 @@ class MatchesController < ApplicationController
 
   private
   def match_params
-    params.require(:match).permit(:gameboard, :gamestatus, :currentplayer, :playerx, :playero, :outcome)
+    params.require(:match).permit(:gameboard, :currentplayer, :playerx, :playero, :outcome, :winner)
   end
 
 end

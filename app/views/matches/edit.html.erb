@@ -8,10 +8,6 @@
     <%= f.text_field :gameboard %>
   </p>
   <p>
-    <%= f.label :gamestatus %><br>
-    <%= f.text_field :gamestatus %>
-  </p>
-  <p>
     <%= f.label :currentplayer %><br>
     <%= f.text_field :currentplayer %>
   </p>
@@ -28,6 +24,10 @@
     <%= f.text_field :outcome %>
   </p>
   <p>
+    <%= f.label :winner %><br>
+    <%= f.text_field :winner %>
+  </p>
+  <p>
     <%= f.submit %>
   </p>
 <% end %>
@@ -37,7 +37,7 @@
 <%= link_to 'Back', matches_path %>
 
 
-<div class="game-board-container">
+<div class="game-board-container" data-game-room-id="<%= @match.id %>">
 
 <div class="top-btn-container">
   <div class="rotate-btn top-btn" id="rotate-right-0"></div>

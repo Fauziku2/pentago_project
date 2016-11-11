@@ -15,24 +15,8 @@
 // = require turbolinks
 // = require_tree .
 
-App.gameroom = App.cable.subscriptions.create('GameroomChannel', {
-  received: function (data) {
-    // Updating game data using updated data
-    // Gameboard
-    strToGameBoardArray(data.gameboard)
-    populateGameBoard()
-    // Currentplayer
-    gameRound.currentPlayer = data.currentplayer
-    gameRound.outcome = data.outcome
-
-    // Updating form
-    $('#match_gameboard').val(data.gameboard)
-    $('#match_currentplayer').val(data.currentplayer)
-    $('#match_outcome').val(data.outcome)
-  }
-})
-
-var gameBoard = [
+$(document).on('turbolinks:load', function () {
+  var gameBoard = [
     ['0', '0', '0', '0', '0', '0'],
     ['0', '0', '0', '0', '0', '0'],
     ['0', '0', '0', '0', '0', '0'],
@@ -41,25 +25,46 @@ var gameBoard = [
     ['0', '0', '0', '0', '0', '0']
   ]
 
-var gameRound = {
-  'currentPlayer': 'X',
-  'playing': true,
-  'X': {
-    'fiveInARow': false
-  },
-  'O': {
-    'fiveInARow': false
-  },
-  'outcome': 'N'
-}
+  var gameRound = {
+    'currentPlayer': 'X',
+    'playing': true,
+    'X': {
+      'fiveInARow': false
+    },
+    'O': {
+      'fiveInARow': false
+    },
+    'outcome': 'N'
+  }
 
-$(document).on('turbolinks:load', function () {
+  $gameBoardContainer = $('.game-board-container')
+
+  App.gameroom = App.cable.subscriptions.create({
+    channel: 'GameroomChannel',
+    game_room_id: $gameBoardContainer.data('game-room-id')
+  }, {
+    received: function (data) {
+      // Updating game data using updated data
+      // Gameboard
+      strToGameBoardArray(data.gameboard)
+      populateGameBoard()
+        // Currentplayer
+      gameRound.currentPlayer = data.currentplayer
+      gameRound.outcome = data.outcome
+
+        // Updating form
+      $('#match_gameboard').val(data.gameboard)
+      $('#match_currentplayer').val(data.currentplayer)
+      $('#match_outcome').val(data.outcome)
+    }
+  })
+
   strToGameBoardArray($('#match_gameboard').val())
   populateGameBoard()
 
   $('.resetboard').on('click', function () {
-    strToGameBoardArray($('#match_gameboard').val("000000000000000000000000000000000000"))
-    $('#match_gameboard').val("000000000000000000000000000000000000")
+    strToGameBoardArray($('#match_gameboard').val('000000000000000000000000000000000000'))
+    $('#match_gameboard').val('000000000000000000000000000000000000')
     $('#match_currentplayer').val('X')
     addGameSquareListener()
   })
@@ -297,62 +302,61 @@ $(document).on('turbolinks:load', function () {
     $('#match_outcome').val(gameRound.outcome)
     $('.game-board-form').submit()
   }
-})
 
-function populateGameTile (gametile) {
-  var x = 0
-  var y = 0
-  var gameTileID
+  function populateGameTile (gametile) {
+    var x = 0
+    var y = 0
+    var gameTileID
 
-  switch (gametile) {
-    case 'board0':
+    switch (gametile) {
+      case 'board0':
       x = 0
       y = 0
       gameTileID = '#game-tile-0'
       break
-    case 'board1':
+      case 'board1':
       x = 0
       y = 3
       gameTileID = '#game-tile-1'
       break
-    case 'board2':
+      case 'board2':
       x = 3
       y = 0
       gameTileID = '#game-tile-2'
       break
-    case 'board3':
+      case 'board3':
       x = 3
       y = 3
       gameTileID = '#game-tile-3'
       break
-    default:
-  }
+      default:
+    }
 
-  var $gameSquare = $(gameTileID + ' .game-square')
-  $gameSquare.removeClass('X')
-  $gameSquare.removeClass('O')
+    var $gameSquare = $(gameTileID + ' .game-square')
+    $gameSquare.removeClass('X')
+    $gameSquare.removeClass('O')
 
-  counter = 0
-  for (var i = x; i < x + 3; i++) {
-    for (var j = y; j < y + 3; j++) {
-      if (gameBoard[i][j] === 'X') {
-        $gameSquare.eq(counter).addClass('X')
-      } else if (gameBoard[i][j] === 'O') {
-        $gameSquare.eq(counter).addClass('O')
+    counter = 0
+    for (var i = x; i < x + 3; i++) {
+      for (var j = y; j < y + 3; j++) {
+        if (gameBoard[i][j] === 'X') {
+          $gameSquare.eq(counter).addClass('X')
+        } else if (gameBoard[i][j] === 'O') {
+          $gameSquare.eq(counter).addClass('O')
+        }
+        counter += 1
       }
-      counter += 1
     }
   }
-}
 
-function populateGameBoard () {
-  populateGameTile('board0')
-  populateGameTile('board1')
-  populateGameTile('board2')
-  populateGameTile('board3')
-}
+  function populateGameBoard () {
+    populateGameTile('board0')
+    populateGameTile('board1')
+    populateGameTile('board2')
+    populateGameTile('board3')
+  }
 
-function strToGameBoardArray (str) {
+  function strToGameBoardArray (str) {
   var counter = 0
   for (var i = 0; i < 6; i++) {
     for (var j = 0; j < 6; j++) {
@@ -361,3 +365,4 @@ function strToGameBoardArray (str) {
     }
   }
 }
+})

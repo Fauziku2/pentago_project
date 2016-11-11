@@ -3,11 +3,11 @@
   <ul>
     <li><%= @match.id %></li>
     <li><%= @match.gameboard %></li>
-    <li><%= @match.gamestatus %></li>
     <li><%= @match.currentplayer %></li>
     <li><%= @match.playerx %></li>
     <li><%= @match.playero %></li>
     <li><%= @match.outcome %></li>
+    <li><%= @match.winner %></li>
   </ul>
 
 <%= link_to 'Edit', edit_match_path(@match) %>
