@@ -6,4 +6,7 @@ class User < ApplicationRecord
 
   has_many :chat_rooms, dependent: :destroy
   has_many :messages, dependent: :destroy
+  
+  validates :body, presence: true, length: {minimum: 2, maximum: 1000}
+  
 end
