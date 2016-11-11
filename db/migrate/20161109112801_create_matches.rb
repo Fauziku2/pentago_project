@@ -6,7 +6,7 @@ class CreateMatches < ActiveRecord::Migration[5.0]
       t.string :currentplayer, default: 'X'
       t.string :playerx
       t.string :playero
-      t.string :outcome
+      t.string :outcome, default: 'N'
 
       t.timestamps
     end

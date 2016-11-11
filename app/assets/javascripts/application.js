@@ -17,12 +17,18 @@
 
 App.gameroom = App.cable.subscriptions.create('GameroomChannel', {
   received: function (data) {
+    // Updating game data using updated data
+    // Gameboard
     strToGameBoardArray(data.gameboard)
-    populateGameBoard('board0')
-    populateGameBoard('board1')
-    populateGameBoard('board2')
-    populateGameBoard('board3')
+    populateGameBoard()
+    // Currentplayer
+    gameRound.currentPlayer = data.currentplayer
+    gameRound.outcome = data.outcome
+
+    // Updating form
     $('#match_gameboard').val(data.gameboard)
+    $('#match_currentplayer').val(data.currentplayer)
+    $('#match_outcome').val(data.outcome)
   }
 })
 
@@ -36,32 +42,26 @@ var gameBoard = [
   ]
 
 var gameRound = {
-    'currentPlayer': 'X',
-    'playing': true,
-    'X': {
-      'fiveInARow': false
-    },
-    'O': {
-      'fiveInARow': false
-    }
-  }
+  'currentPlayer': 'X',
+  'playing': true,
+  'X': {
+    'fiveInARow': false
+  },
+  'O': {
+    'fiveInARow': false
+  },
+  'outcome': 'N'
+}
 
-$(document).ready(function () {
+$(document).on('turbolinks:load', function () {
   strToGameBoardArray($('#match_gameboard').val())
-  populateGameBoard('board0')
-  populateGameBoard('board1')
-  populateGameBoard('board2')
-  populateGameBoard('board3')
+  populateGameBoard()
 
-  $('.game-board-form').submit(function () {
-    var valuesToSubmit = $(this).serializeArray()
-    $.ajax({
-      type: 'PUT',
-      url: $(this).attr('action'),
-      data: valuesToSubmit
-    }).done(function () {
-    })
-    return false
+  $('.resetboard').on('click', function () {
+    strToGameBoardArray($('#match_gameboard').val("000000000000000000000000000000000000"))
+    $('#match_gameboard').val("000000000000000000000000000000000000")
+    $('#match_currentplayer').val('X')
+    addGameSquareListener()
   })
 
   var $allGameSquare = $('.game-square')
@@ -276,13 +276,13 @@ $(document).ready(function () {
     }
 
     if (gameRound.X.fiveInARow && gameRound.O.fiveInARow) {
-      alert('TIE')
+      gameRound.outcome = 'T'
     } else if (gameRound.X.fiveInARow) {
-      alert('X WIN')
+      gameRound.outcome = 'X'
     } else if (gameRound.O.fiveInARow) {
-      alert('O WIN')
+      gameRound.outcome = 'O'
     } else if (filledGameSquares === 36) {
-      alert('TIE')
+      gameRound.outcome = 'T'
     }
   }
 
@@ -294,11 +294,12 @@ $(document).ready(function () {
 
     $('#match_gameboard').val(str)
     $('#match_currentplayer').val(gameRound.currentPlayer)
+    $('#match_outcome').val(gameRound.outcome)
     $('.game-board-form').submit()
   }
 })
 
-function populateGameBoard (gametile) {
+function populateGameTile (gametile) {
   var x = 0
   var y = 0
   var gameTileID
@@ -342,6 +343,13 @@ function populateGameBoard (gametile) {
       counter += 1
     }
   }
+}
+
+function populateGameBoard () {
+  populateGameTile('board0')
+  populateGameTile('board1')
+  populateGameTile('board2')
+  populateGameTile('board3')
 }
 
 function strToGameBoardArray (str) {

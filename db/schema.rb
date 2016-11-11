@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20161109112801) do
     t.string   "currentplayer", default: "X"
     t.string   "playerx"
     t.string   "playero"
-    t.string   "outcome"
+    t.string   "outcome",       default: "N"
     t.datetime "created_at",                                                     null: false
     t.datetime "updated_at",                                                     null: false
   end
