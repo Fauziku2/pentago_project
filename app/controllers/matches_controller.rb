@@ -9,6 +9,7 @@ class MatchesController < ApplicationController
 
   def new
     @match = Match.new
+    @match.playerx_id = current_user.id
   end
 
   def edit
@@ -49,7 +50,7 @@ class MatchesController < ApplicationController
 
   private
   def match_params
-    params.require(:match).permit(:gameboard, :currentplayer, :playerx, :playero, :outcome, :winner)
+    params.require(:match).permit(:gameboard, :currentplayer, :playerx_id, :playero_id, :outcome, :winner)
   end
 
 end
