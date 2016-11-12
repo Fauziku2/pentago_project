@@ -4,7 +4,7 @@ class CreateMatches < ActiveRecord::Migration[5.0]
       t.string :gameboard, default: '000000000000000000000000000000000000'
       t.string :currentplayer, default: 'X'
       t.integer :playerx_id
-      t.integer :playero_id
+      t.integer :playero_id, default: nil
       t.string :outcome, default: 'N'
       t.integer :winner
 

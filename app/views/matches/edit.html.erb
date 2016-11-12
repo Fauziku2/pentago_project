@@ -2,40 +2,9 @@
 
 <p class="gameboardarray"></p>
 
-<%= form_for @match, :html => {:class => 'game-board-form'}, :remote => true do |f| %>
-  <p>
-    <%= f.label :gameboard %><br>
-    <%= f.text_field :gameboard %>
-  </p>
-  <p>
-    <%= f.label :currentplayer %><br>
-    <%= f.text_field :currentplayer %>
-  </p>
-  <p>
-    <%= f.label :playerx %><br>
-    <%= f.text_field :playerx %>
-  </p>
-  <p>
-    <%= f.label :playero %><br>
-    <%= f.text_field :playero %>
-  </p>
-  <p>
-    <%= f.label :outcome %><br>
-    <%= f.text_field :outcome %>
-  </p>
-  <p>
-    <%= f.label :winner %><br>
-    <%= f.text_field :winner %>
-  </p>
-  <p>
-    <%= f.submit %>
-  </p>
+<%= form_for @match, html: {class: 'game-board-form'}, remote: true do |f| %>
+  <%= render 'form_input', f: f %>
 <% end %>
-
-<p>
-  <%= @match.playerx %>
-  <%= @match.playero %>
-</p>
 
 <button type="button" class="btn btn-danger resetboard" name="button">Reset</button>
 

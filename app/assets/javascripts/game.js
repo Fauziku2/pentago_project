@@ -11,9 +11,11 @@ $(document).on('turbolinks:load', function () {
   var gameRound = {
     'currentPlayer': 'X',
     'X': {
+      'id': 1,
       'fiveInARow': false
     },
     'O': {
+      'id': 2,
       'fiveInARow': false
     },
     'outcome': 'N'
@@ -38,6 +40,8 @@ $(document).on('turbolinks:load', function () {
       $('#match_gameboard').val(data.gameboard)
       $('#match_currentplayer').val(data.currentplayer)
       $('#match_outcome').val(data.outcome)
+      $('#match_playerx_id').val(data.playerx)
+      $('#match_playero_id').val(data.playero)
     }
   })
 
@@ -284,6 +288,8 @@ $(document).on('turbolinks:load', function () {
     $('#match_gameboard').val(str)
     $('#match_currentplayer').val(gameRound.currentPlayer)
     $('#match_outcome').val(gameRound.outcome)
+    $('#match_playerx_id').val(gameRound.X.id)
+    $('#match_playero_id').val(gameRound.O.id)
     $('.game-board-form').submit()
   }
 

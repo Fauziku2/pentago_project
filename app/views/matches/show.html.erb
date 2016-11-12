@@ -11,3 +11,7 @@
   </ul>
 
 <%= link_to 'Edit', edit_match_path(@match) %>
+
+<%= form_for @match, html: {class: 'game-join-form'}, url: {action: 'challenge'} do |f| %>
+  <%= render 'form_input', f: f %>
+<% end %>

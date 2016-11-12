@@ -6,7 +6,12 @@ Rails.application.routes.draw do
 }
 
   resources :users
-  resources :matches
+  resources :matches do
+    member do
+      patch 'challenge', to: 'matches#challenge'
+    end
+  end
+
   root "users#home"
 
   mount ActionCable.server, at: '/cable'

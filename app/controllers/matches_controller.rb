@@ -5,6 +5,7 @@ class MatchesController < ApplicationController
 
   def show
     @match = Match.find(params[:id])
+    @match.playero_id = current_user.id
   end
 
   def new
@@ -26,6 +27,13 @@ class MatchesController < ApplicationController
     end
   end
 
+  def challenge
+    @match = Match.find(params[:id])
+    if @match.update(match_params)
+      redirect_to edit_match_path
+    end
+  end
+
   def update
     @match = Match.find(params[:id])
 
@@ -33,11 +41,11 @@ class MatchesController < ApplicationController
       ActionCable.server.broadcast "gameroom_channel_#{@match.id}",
                                    gameboard:  @match.gameboard,
                                    currentplayer: @match.currentplayer,
-                                   playerx:  @match.playerx,
-                                   playero: @match.playero,
+                                   playerx:  @match.playerx_id,
+                                   playero: @match.playero_id,
                                    outcome: @match.outcome,
                                    winner: @match.winner
-      head :ok
+      # head :ok
     end
   end
 
