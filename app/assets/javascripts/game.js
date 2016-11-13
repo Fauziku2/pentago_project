@@ -9,19 +9,32 @@ $(document).on('turbolinks:load', function () {
   ]
 
   var gameRound = {
-    'currentPlayer': 'X',
+    'currentplayer': '',
+    'playerid': 0,
     'X': {
-      'id': 1,
+      'id': 0,
       'fiveInARow': false
     },
     'O': {
-      'id': 2,
+      'id': 0,
       'fiveInARow': false
     },
     'outcome': 'N'
   }
 
+  // Ajax request to get parameters? The problem is that you're initialising the gameboard with fixed values, when you really should be getting them from back-end in order for them to stay updated
+  // Retrieving the data with HTML is stupid.
+  // When you refresh, should be able to get the previous values (current player)
+
   var $gameBoardContainer = $('.game-board-container')
+
+  // Filling up gameround with lame HTML shit.
+  gameRound.X.id = parseInt($('.player-x-p').text())
+  gameRound.O.id = parseInt($('.player-o-p').text())
+  gameRound.currentplayer = $('.currentplayer-p').text()
+  gameRound.playerid = parseInt($('.player-me-me').text())
+
+  console.log(gameRound)
 
   App.gameroom = App.cable.subscriptions.create({
     channel: 'GameroomChannel',
@@ -32,11 +45,18 @@ $(document).on('turbolinks:load', function () {
       // Gameboard
       strToGameBoardArray(data.gameboard)
       populateGameBoard()
-        // Currentplayer
-      gameRound.currentPlayer = data.currentplayer
+      // Gameround values from backend
+      gameRound.currentplayer = data.currentplayer
       gameRound.outcome = data.outcome
+      gameRound.X.id = data.playerx
+      gameRound.O.id = data.playero
 
-        // Updating form
+      // Data for validation
+      $('.player-x-p').text(data.playerx)
+      $('.player-o-p').text(data.playero)
+      $('.player-me-p').text(data.playerid)
+
+      // Updating form
       $('#match_gameboard').val(data.gameboard)
       $('#match_currentplayer').val(data.currentplayer)
       $('#match_outcome').val(data.outcome)
@@ -45,18 +65,24 @@ $(document).on('turbolinks:load', function () {
     }
   })
 
+  function updateFormInputAndSubmit () {
+    var str = ''
+    for (var i = 0; i < 6; i++) {
+      str += gameBoard[i].join('')
+    }
+
+    $('#match_gameboard').val(str)
+    $('#match_currentplayer').val(gameRound.currentplayer)
+    $('#match_outcome').val(gameRound.outcome)
+    $('.game-board-form').submit()
+  }
+
   strToGameBoardArray($('#match_gameboard').val())
 
   populateGameBoard()
 
-  $('.resetboard').on('click', function () {
-    strToGameBoardArray($('#match_gameboard').val('000000000000000000000000000000000000'))
-    $('#match_gameboard').val('000000000000000000000000000000000000')
-    $('#match_currentplayer').val('X')
-    addGameSquareListener()
-  })
-
   var $allGameSquare = $('.game-square')
+  var $allRotateButtons = $('.rotate-btn')
 
   function addGameSquareListener () {
     $allGameSquare.off()
@@ -84,21 +110,30 @@ $(document).on('turbolinks:load', function () {
     }
   }
 
-  addRotateButtonListener()
-
   function placeToken () {
-    // If cell is populated
-    if (!$(this).hasClass('X') && !$(this).hasClass('O')) {
-      // Gets rows and col index from HTML divs
-      var xCoord = Number($(this).data('row'))
-      var yCoord = Number($(this).data('col'))
+    console.log('Place Token:')
+    console.log('Me ID: ' + gameRound.playerid)
+    console.log('Current player ID: ' + gameRound[gameRound.currentplayer].id)
 
-      // Assigns player value to gameBoard array and HTML
-      gameBoard[xCoord][yCoord] = gameRound.currentPlayer
-      $(this).addClass(gameRound.currentPlayer)
+    if (gameRound.playerid === gameRound[gameRound.currentplayer].id) {
 
-      checkWinCondition(xCoord, yCoord)
-      updateFormInputAndSubmit()
+      // If cell is populated
+      if (!$(this).hasClass('X') && !$(this).hasClass('O')) {
+        // Gets rows and col index from HTML divs
+        var xCoord = Number($(this).data('row'))
+        var yCoord = Number($(this).data('col'))
+
+        // Assigns player value to gameBoard array and HTML
+        gameBoard[xCoord][yCoord] = gameRound.currentplayer
+        $(this).addClass(gameRound.currentplayer)
+
+        $allGameSquare.off()
+        addRotateButtonListener()
+
+        checkWinCondition(xCoord, yCoord)
+        updateFormInputAndSubmit()
+      }
+
     }
 
   }
@@ -135,67 +170,75 @@ $(document).on('turbolinks:load', function () {
     var $gameSquareTile = $(gameTileID + ' .game-square')
 
     function rotateBoard () {
-      var newValsAfterRotate = {}
+      console.log('Rotate Board:')
+      console.log('Me ID: ' + gameRound.playerid)
+      console.log('Current player ID: ' + gameRound[gameRound.currentplayer].id)
 
-      if (rotateDirection === 'right') {
-        newValsAfterRotate = {
-          '0': gameBoard[x + 2][y],
-          '1': gameBoard[x + 1][y],
-          '2': gameBoard[x][y],
-          '3': gameBoard[x + 2][y + 1],
-          '4': gameBoard[x + 1][y + 1],
-          '5': gameBoard[x][y + 1],
-          '6': gameBoard[x + 2][y + 2],
-          '7': gameBoard[x + 1][y + 2],
-          '8': gameBoard[x][y + 2]
-        }
-      } else if (rotateDirection === 'left') {
-        newValsAfterRotate = {
-          '0': gameBoard[x][y + 2],
-          '1': gameBoard[x + 1][y + 2],
-          '2': gameBoard[x + 2][y + 2],
-          '3': gameBoard[x][y + 1],
-          '4': gameBoard[x + 1][y + 1],
-          '5': gameBoard[x + 2][y + 1],
-          '6': gameBoard[x][y],
-          '7': gameBoard[x + 1][y],
-          '8': gameBoard[x + 2][y]
-        }
-      }
+      if (gameRound.playerid === gameRound[gameRound.currentplayer].id) {
 
-      $gameSquareTile.removeClass('X')
-      $gameSquareTile.removeClass('O')
+        var newValsAfterRotate = {}
 
-      var counter = 0
-      // For each item on a game-tile, get new rotated value and assign new classes accordingly
-      for (var i = x; i < x + 3; i++) {
-        for (var j = y; j < y + 3; j++) {
-          // Assigning the values to new positions on gameBoard
-          gameBoard[i][j] = newValsAfterRotate[counter]
-
-          // Changing class to reflect gameBoard changes
-          if (gameBoard[i][j] === 'X') {
-            $gameSquareTile.eq(counter).addClass('X')
-          } else if (gameBoard[i][j] === 'O') {
-            $gameSquareTile.eq(counter).addClass('O')
+        if (rotateDirection === 'right') {
+          newValsAfterRotate = {
+            '0': gameBoard[x + 2][y],
+            '1': gameBoard[x + 1][y],
+            '2': gameBoard[x][y],
+            '3': gameBoard[x + 2][y + 1],
+            '4': gameBoard[x + 1][y + 1],
+            '5': gameBoard[x][y + 1],
+            '6': gameBoard[x + 2][y + 2],
+            '7': gameBoard[x + 1][y + 2],
+            '8': gameBoard[x][y + 2]
           }
-          // counter to loop through the gameSquareTile array
-          counter += 1
-          checkWinCondition(i, j)
+        } else if (rotateDirection === 'left') {
+          newValsAfterRotate = {
+            '0': gameBoard[x][y + 2],
+            '1': gameBoard[x + 1][y + 2],
+            '2': gameBoard[x + 2][y + 2],
+            '3': gameBoard[x][y + 1],
+            '4': gameBoard[x + 1][y + 1],
+            '5': gameBoard[x + 2][y + 1],
+            '6': gameBoard[x][y],
+            '7': gameBoard[x + 1][y],
+            '8': gameBoard[x + 2][y]
+          }
         }
+
+        $gameSquareTile.removeClass('X')
+        $gameSquareTile.removeClass('O')
+
+        var counter = 0
+        // For each item on a game-tile, get new rotated value and assign new classes accordingly
+        for (var i = x; i < x + 3; i++) {
+          for (var j = y; j < y + 3; j++) {
+            // Assigning the values to new positions on gameBoard
+            gameBoard[i][j] = newValsAfterRotate[counter]
+
+            // Changing class to reflect gameBoard changes
+            if (gameBoard[i][j] === 'X') {
+              $gameSquareTile.eq(counter).addClass('X')
+            } else if (gameBoard[i][j] === 'O') {
+              $gameSquareTile.eq(counter).addClass('O')
+            }
+            // counter to loop through the gameSquareTile array
+            counter += 1
+            checkWinCondition(i, j)
+          }
+        }
+        $allRotateButtons.off()
+        addGameSquareListener()
+        togglePlayer()
+        updateFormInputAndSubmit()
       }
-      togglePlayer()
-      updateFormInputAndSubmit()
-      addGameSquareListener()
     }
     return rotateBoard
   }
 
   function togglePlayer () {
-    if (gameRound.currentPlayer === 'X') {
-      gameRound.currentPlayer = 'O'
+    if (gameRound.currentplayer === 'X') {
+      gameRound.currentplayer = 'O'
     } else {
-      gameRound.currentPlayer = 'X'
+      gameRound.currentplayer = 'X'
     }
   }
 
@@ -251,7 +294,7 @@ $(document).on('turbolinks:load', function () {
     countMatchesHalfDirection(xCoord, yCoord, xAdjust, yAdjust, 'backward')
 
     if (totalMatches >= 4) {
-      gameRound[gameRound.currentPlayer].fiveInARow = true
+      gameRound[gameRound.currentplayer].fiveInARow = true
     }
   }
 
@@ -277,20 +320,6 @@ $(document).on('turbolinks:load', function () {
     } else if (filledGameSquares === 36) {
       gameRound.outcome = 'T'
     }
-  }
-
-  function updateFormInputAndSubmit () {
-    var str = ''
-    for (var i = 0; i < 6; i++) {
-      str += gameBoard[i].join('')
-    }
-
-    $('#match_gameboard').val(str)
-    $('#match_currentplayer').val(gameRound.currentPlayer)
-    $('#match_outcome').val(gameRound.outcome)
-    $('#match_playerx_id').val(gameRound.X.id)
-    $('#match_playero_id').val(gameRound.O.id)
-    $('.game-board-form').submit()
   }
 
   function populateGameTile (gametile) {

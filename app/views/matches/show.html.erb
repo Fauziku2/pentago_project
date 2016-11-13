@@ -15,3 +15,5 @@
 <%= form_for @match, html: {class: 'game-join-form'}, url: {action: 'challenge'} do |f| %>
   <%= render 'form_input', f: f %>
 <% end %>
+
+<%= link_to("Enter Room", challenge_match_path, :method => :patch) %>

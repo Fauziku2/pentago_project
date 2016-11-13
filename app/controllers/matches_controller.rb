@@ -15,6 +15,7 @@ class MatchesController < ApplicationController
 
   def edit
     @match = Match.find(params[:id])
+    @user = current_user.id
   end
 
   def create
@@ -29,9 +30,17 @@ class MatchesController < ApplicationController
 
   def challenge
     @match = Match.find(params[:id])
-    if @match.update(match_params)
-      redirect_to edit_match_path
+    if @match.update_attribute(:playero_id, current_user.id)
+
+      ActionCable.server.broadcast "gameroom_channel_#{@match.id}",
+        gameboard:  @match.gameboard,
+        currentplayer: @match.currentplayer,
+        playerx:  @match.playerx_id,
+        playero: @match.playero_id,
+        outcome: @match.outcome,
+        winner: @match.winner
     end
+    redirect_to edit_match_path
   end
 
   def update
@@ -44,7 +53,8 @@ class MatchesController < ApplicationController
                                    playerx:  @match.playerx_id,
                                    playero: @match.playero_id,
                                    outcome: @match.outcome,
-                                   winner: @match.winner
+                                   winner: @match.winner,
+                                   playerid: current_user.id
       # head :ok
     end
   end

@@ -1,15 +1,16 @@
 <h1>Pentago</h1>
 
-<p class="gameboardarray"></p>
+<p class="player-x-p"><%= @match.playerx_id %></p>
+<p class="player-o-p"><%= @match.playero_id %></p>
+<p class="currentplayer-p"><%= @match.currentplayer %></p>
+<p class="player-me-me"><%= @user %></p>
+
 
 <%= form_for @match, html: {class: 'game-board-form'}, remote: true do |f| %>
   <%= render 'form_input', f: f %>
 <% end %>
 
-<button type="button" class="btn btn-danger resetboard" name="button">Reset</button>
-
 <%= link_to 'Back', matches_path %>
-
 
 <div class="game-board-container" data-game-room-id="<%= @match.id %>">
 
