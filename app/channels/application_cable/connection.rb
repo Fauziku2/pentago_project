@@ -17,6 +17,5 @@ module ApplicationCable
         reject_unauthorized_connection
       end
     end
-    
   end
 end

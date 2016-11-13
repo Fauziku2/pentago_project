@@ -6,10 +6,6 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
   
-  class Application < Rails::Application
-    config.web_console.whitelisted_ips = '116.86.0.55'
-  end
-  
   config.action_cable.allowed_request_origins = [
     'https://pentago-project-zhihongchensg.c9users.io' ]
     

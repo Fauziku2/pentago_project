@@ -39,7 +39,12 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (7.1.4)
+    autoprefixer-rails (6.5.3)
+      execjs
     bcrypt (3.1.11)
+    bootstrap (4.0.0.alpha5)
+      autoprefixer-rails (>= 6.0.3)
+      sass (>= 3.4.19)
     builder (3.2.2)
     byebug (9.0.6)
     coderay (1.1.1)
@@ -89,6 +94,7 @@ GEM
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
     orm_adapter (0.5.0)
+    pg (0.19.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -114,6 +120,11 @@ GEM
       nokogiri (~> 1.6.0)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
+    rails_12factor (0.0.3)
+      rails_serve_static_assets
+      rails_stdout_logging
+    rails_serve_static_assets (0.0.5)
+    rails_stdout_logging (0.0.5)
     railties (5.0.0.1)
       actionpack (= 5.0.0.1)
       activesupport (= 5.0.0.1)
@@ -173,15 +184,18 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bootstrap (~> 4.0.0.alpha3)
   byebug
   coffee-rails (~> 4.2)
   devise
   jbuilder (~> 2.5)
   jquery-rails
   listen (~> 3.0.5)
+  pg
   pry
   puma (~> 3.0)
   rails (~> 5.0.0, >= 5.0.0.1)
+  rails_12factor
   redis (~> 3.2)
   sass-rails (~> 5.0)
   spring
