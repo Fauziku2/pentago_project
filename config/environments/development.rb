@@ -9,8 +9,6 @@ Rails.application.configure do
   config.action_cable.allowed_request_origins = [
     'https://pentago-project-zhihongchensg.c9users.io' ]
     
-
-
   # Do not eager load code on boot.
   config.eager_load = false
 
