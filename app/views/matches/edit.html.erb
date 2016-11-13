@@ -4,6 +4,8 @@
 <p class="player-o-p"><%= @match.playero_id %></p>
 <p class="currentplayer-p"><%= @match.currentplayer %></p>
 <p class="player-me-me"><%= @user %></p>
+<p class="outcome-p"><%= @match.outcome %></p>
+<p class="winner-p"><%= @match.winner %></p>
 
 
 <%= form_for @match, html: {class: 'game-board-form'}, remote: true do |f| %>
@@ -13,6 +15,8 @@
 <%= link_to 'Back', matches_path %>
 
 <div class="game-board-container" data-game-room-id="<%= @match.id %>">
+
+<p class='outcome-message'></p>
 
 <div class="top-btn-container">
   <div class="rotate-btn top-btn" id="rotate-right-0"></div>

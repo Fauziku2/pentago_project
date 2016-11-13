@@ -19,20 +19,21 @@ $(document).on('turbolinks:load', function () {
       'id': 0,
       'fiveInARow': false
     },
-    'outcome': 'N'
+    'outcome': '',
+    'winner': ''
   }
 
-  // Ajax request to get parameters? The problem is that you're initialising the gameboard with fixed values, when you really should be getting them from back-end in order for them to stay updated
-  // Retrieving the data with HTML is stupid.
-  // When you refresh, should be able to get the previous values (current player)
-
   var $gameBoardContainer = $('.game-board-container')
+  var $allGameSquare = $('.game-square')
+  var $allRotateButtons = $('.rotate-btn')
 
-  // Filling up gameround with lame HTML shit.
-  gameRound.X.id = parseInt($('.player-x-p').text())
-  gameRound.O.id = parseInt($('.player-o-p').text())
+  // Filling up gameround with html data when reload
   gameRound.currentplayer = $('.currentplayer-p').text()
   gameRound.playerid = parseInt($('.player-me-me').text())
+  gameRound.X.id = parseInt($('.player-x-p').text())
+  gameRound.O.id = parseInt($('.player-o-p').text())
+  gameRound.outcome = ($('.outcome-p').text())
+  gameRound.winner = ($('.winner-p').text())
 
   console.log(gameRound)
 
@@ -51,9 +52,12 @@ $(document).on('turbolinks:load', function () {
       gameRound.X.id = data.playerx
       gameRound.O.id = data.playero
 
+      getOutcomeMessage()
+
       // Data for validation
       $('.player-x-p').text(data.playerx)
       $('.player-o-p').text(data.playero)
+      $('.currentplayer-p').text(data.currentplayer)
       $('.player-me-p').text(data.playerid)
 
       // Updating form
@@ -62,6 +66,7 @@ $(document).on('turbolinks:load', function () {
       $('#match_outcome').val(data.outcome)
       $('#match_playerx_id').val(data.playerx)
       $('#match_playero_id').val(data.playero)
+      $('#match_winner').val(data.winner)
     }
   })
 
@@ -74,6 +79,7 @@ $(document).on('turbolinks:load', function () {
     $('#match_gameboard').val(str)
     $('#match_currentplayer').val(gameRound.currentplayer)
     $('#match_outcome').val(gameRound.outcome)
+    $('#match_winner').val(gameRound.winner)
     $('.game-board-form').submit()
   }
 
@@ -81,8 +87,7 @@ $(document).on('turbolinks:load', function () {
 
   populateGameBoard()
 
-  var $allGameSquare = $('.game-square')
-  var $allRotateButtons = $('.rotate-btn')
+  getOutcomeMessage()
 
   function addGameSquareListener () {
     $allGameSquare.off()
@@ -111,12 +116,7 @@ $(document).on('turbolinks:load', function () {
   }
 
   function placeToken () {
-    console.log('Place Token:')
-    console.log('Me ID: ' + gameRound.playerid)
-    console.log('Current player ID: ' + gameRound[gameRound.currentplayer].id)
-
-    if (gameRound.playerid === gameRound[gameRound.currentplayer].id) {
-
+    if (gameRound.playerid === gameRound[gameRound.currentplayer].id && gameRound.outcome === 'N') {
       // If cell is populated
       if (!$(this).hasClass('X') && !$(this).hasClass('O')) {
         // Gets rows and col index from HTML divs
@@ -133,9 +133,7 @@ $(document).on('turbolinks:load', function () {
         checkWinCondition(xCoord, yCoord)
         updateFormInputAndSubmit()
       }
-
     }
-
   }
 
   function rotateButtonFunction (boardIndex, rotateDirection) {
@@ -170,12 +168,7 @@ $(document).on('turbolinks:load', function () {
     var $gameSquareTile = $(gameTileID + ' .game-square')
 
     function rotateBoard () {
-      console.log('Rotate Board:')
-      console.log('Me ID: ' + gameRound.playerid)
-      console.log('Current player ID: ' + gameRound[gameRound.currentplayer].id)
-
-      if (gameRound.playerid === gameRound[gameRound.currentplayer].id) {
-
+      if (gameRound.playerid === gameRound[gameRound.currentplayer].id && gameRound.outcome === 'N') {
         var newValsAfterRotate = {}
 
         if (rotateDirection === 'right') {
@@ -227,6 +220,7 @@ $(document).on('turbolinks:load', function () {
         }
         $allRotateButtons.off()
         addGameSquareListener()
+
         togglePlayer()
         updateFormInputAndSubmit()
       }
@@ -315,8 +309,10 @@ $(document).on('turbolinks:load', function () {
       gameRound.outcome = 'T'
     } else if (gameRound.X.fiveInARow) {
       gameRound.outcome = 'X'
+      gameRound.winner = gameRound.X.id
     } else if (gameRound.O.fiveInARow) {
       gameRound.outcome = 'O'
+      gameRound.winner = gameRound.O.id
     } else if (filledGameSquares === 36) {
       gameRound.outcome = 'T'
     }
@@ -383,5 +379,28 @@ $(document).on('turbolinks:load', function () {
         counter += 1
       }
     }
+  }
+
+  function getOutcomeMessage () {
+    var outcomeMessage = ''
+    switch (gameRound.outcome) {
+      case 'T':
+        outcomeMessage = "It's a tie!"
+        break
+      case 'X':
+        outcomeMessage = 'White wins!'
+        break
+      case 'O':
+        outcomeMessage = 'Black wins!!'
+        break
+      case 'N':
+        if (gameRound.currentplayer === 'X') {
+          outcomeMessage = "White's turn"
+        } else if (gameRound.currentplayer === 'O') {
+          outcomeMessage = "Black's turn"
+        }
+        break
+    }
+    $('.outcome-message').text(outcomeMessage)
   }
 })
