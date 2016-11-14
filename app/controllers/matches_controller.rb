@@ -1,6 +1,7 @@
 class MatchesController < ApplicationController
   def index
-    @matches = Match.all
+    @availablematches = Match.where(playero_id:nil)
+    @livematches = Match.where(outcome:'N').where.not(playero_id:nil)
   end
 
   def show
@@ -21,11 +22,6 @@ class MatchesController < ApplicationController
     @match.playerx_id = current_user.id
   end
 
-  def edit
-    @match = Match.find(params[:id])
-    @user = current_user.id
-  end
-
   def create
     @match = Match.new(match_params)
 
@@ -38,17 +34,20 @@ class MatchesController < ApplicationController
 
   def challenge
     @match = Match.find(params[:id])
-    if @match.update_attribute(:playero_id, current_user.id)
+    # Add this validation to a model
+    if @match.playero_id.blank?
+      if @match.update_attribute(:playero_id, current_user.id)
 
-      ActionCable.server.broadcast "gameroom_channel_#{@match.id}",
-        gameboard:  @match.gameboard,
-        currentplayer: @match.currentplayer,
-        playerx:  @match.playerx_id,
-        playero: @match.playero_id,
-        outcome: @match.outcome,
-        winner: @match.winner
+        ActionCable.server.broadcast "gameroom_channel_#{@match.id}",
+          gameboard:  @match.gameboard,
+          currentplayer: @match.currentplayer,
+          playerx:  @match.playerx_id,
+          playero: @match.playero_id,
+          outcome: @match.outcome,
+          winner: @match.winner
+      end
+      redirect_to match_path
     end
-    redirect_to edit_match_path
   end
 
   def update
@@ -57,6 +56,7 @@ class MatchesController < ApplicationController
     if @match.update(match_params)
       ActionCable.server.broadcast "gameroom_channel_#{@match.id}",
                                    gameboard:  @match.gameboard,
+                                   moveindex: @match.moveindex,
                                    currentplayer: @match.currentplayer,
                                    playerx:  @match.playerx_id,
                                    playero: @match.playero_id,
@@ -76,7 +76,7 @@ class MatchesController < ApplicationController
 
   private
   def match_params
-    params.require(:match).permit(:gameboard, :currentplayer, :playerx_id, :playero_id, :outcome, :winner)
+    params.require(:match).permit(:gameboard, :moveindex, :currentplayer, :playerx_id, :playero_id, :outcome, :winner)
   end
 
 end

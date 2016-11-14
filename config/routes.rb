@@ -6,7 +6,8 @@ Rails.application.routes.draw do
 }
 
   resources :users
-  resources :matches do
+
+  resources :matches, except: [:edit] do
     member do
       patch 'challenge', to: 'matches#challenge'
     end

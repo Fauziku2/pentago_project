@@ -1,15 +1,16 @@
-<h1>Show</h1>
+<h1>Pentago</h1>
 
-  <ul>
-    <li><%= @match.id %></li>
-    <li><%= @match.gameboard %></li>
-    <li><%= @match.currentplayer %></li>
-    <li><%= @match.playerx_id %></li>
-    <li><%= @match.playero_id %></li>
-    <li><%= @match.outcome %></li>
-    <li><%= @match.winner %></li>
-    <li>Your ID: <%= @user %></li>
-  </ul>
+<p>Gameround: <span class="gameboard-p"><%= @match.gameboard %></span></p>
+<p>Move index: <span class="moveindex-p"><%= @match.moveindex %></span></p>
+<p>Player X: <span class="player-x-p"><%= @match.playerx_id %></span></p>
+<p>Player O: <span class="player-o-p"><%= @match.playero_id %></span></p>
+<p>Current Player: <span class="currentplayer-p"><%= @match.currentplayer %></span></p>
+<p>Current User: <span class="player-me-me"><%= @user %></span></p>
+<p>Outcome: <span class="outcome-p"><%= @match.outcome %></span></p>
+<p>Winner: <span class="winner-p"><%= @match.winner %></span></p>
 
-<%= link_to 'Enter Room (edit_path)', edit_match_path(@match) %><br>
-<%= link_to("Challenge! (challenge_path)", challenge_match_path, :method => :patch) %>
+<%= link_to 'Back', matches_path %>
+
+<%= render 'hidden_gameboard_form' %>
+
+<%= render 'game_board' %>

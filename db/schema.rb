@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20161111064552) do
   create_table "matches", force: :cascade do |t|
     t.string   "gameboard",     default: "000000000000000000000000000000000000"
     t.string   "currentplayer", default: "X"
+    t.string   "moveindex",     default: "A"
     t.integer  "playerx_id"
     t.integer  "playero_id"
     t.string   "outcome",       default: "N"

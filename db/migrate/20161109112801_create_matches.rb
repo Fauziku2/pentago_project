@@ -3,6 +3,7 @@ class CreateMatches < ActiveRecord::Migration[5.0]
     create_table :matches do |t|
       t.string :gameboard, default: '000000000000000000000000000000000000'
       t.string :currentplayer, default: 'X'
+      t.string :moveindex, default: 'A'
       t.integer :playerx_id
       t.integer :playero_id, default: nil
       t.string :outcome, default: 'N'

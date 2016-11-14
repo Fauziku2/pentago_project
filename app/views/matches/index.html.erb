@@ -1,20 +1,43 @@
-<h1>Index</h1>
+<%= link_to 'Create Room', new_match_path %><br>
 
-<% @matches.each do |match| %>
-<div class="col-md-3">
-  <ul>
-    <li><%= match.id %></li>
-    <li>playerX: <%= match.playerx_id %></li>
-    <li>playerO: <%= match.playero_id %></li>
-    <li>Outcome: <%= match.outcome %></li>
-    <li>Winner: <%= match.winner %></li>
+<h2>Available Matches</h2>
+<% if @availablematches %>
+  <% @availablematches.each do |match| %>
+  <div class="col-md-3">
+    <ul>
+      <li><%= match.id %></li>
+      <li>playerX: <%= match.playerx_id %></li>
+      <li>playerO: <%= match.playero_id %></li>
+      <li>Move Index: <%= match.moveindex %></li>
+      <li>Outcome: <%= match.outcome %></li>
+      <li>Winner: <%= match.winner %></li>
 
-    <%= link_to 'Show', match_path(match) %>
-    <%= link_to 'Destroy', match_path(match),
-    method: :delete, data: { confirm: 'Are you sure?' } %>
-  </ul>
-  <%= link_to 'Enter Room (edit_path)', edit_match_path(match) %><br>
-  <%= link_to("Challenge! (challenge_path)", challenge_match_path(match), :method => :patch) %>
+      <%= link_to 'Destroy', match_path(match),
+      method: :delete, data: { confirm: 'Are you sure?' } %>
+    </ul>
+    <%= link_to 'Enter Room', match_path(match) %><br>
+    <%= link_to("Challenge!", challenge_match_path(match), :method => :patch) %>
+  </div>
+  <% end %>
+<% end %>
 
-</div>
+<h2 class="col-md-12">Live Matches</h2>
+<% if @livematches %>
+  <% @livematches.each do |match| %>
+  <div class="col-md-3">
+    <ul>
+      <li><%= match.id %></li>
+      <li>playerX: <%= match.playerx_id %></li>
+      <li>playerO: <%= match.playero_id %></li>
+      <li>Move Index: <%= match.moveindex %></li>
+      <li>Outcome: <%= match.outcome %></li>
+      <li>Winner: <%= match.winner %></li>
+
+      <%= link_to 'Destroy', match_path(match),
+      method: :delete, data: { confirm: 'Are you sure?' } %>
+    </ul>
+    <%= link_to 'Enter Room', match_path(match) %><br>
+    <%= link_to("Challenge!", challenge_match_path(match), :method => :patch) %>
+  </div>
+  <% end %>
 <% end %>
