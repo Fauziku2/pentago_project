@@ -9,6 +9,7 @@ $(document).on('turbolinks:load', function () {
   ]
 
   var gameRound = {
+    'gamestr': '',
     'currentplayer': '',
     'playerid': 0,
     'X': {
@@ -33,16 +34,18 @@ $(document).on('turbolinks:load', function () {
   var jsonPath = slicedpath + '.json'
 
   $.get(jsonPath, function (obj) {
+    gameRound.gamestr = obj.match.gameboard
     gameRound.currentplayer = obj.match.currentplayer
     gameRound.playerid = obj.user
     gameRound.X.id = obj.match.playerx_id
     gameRound.O.id = obj.match.playero_id
     gameRound.outcome = obj.match.outcome
     gameRound.winner = obj.match.winner
+    strToGameBoardArray(gameRound.gamestr)
+    populateGameBoard()
     getOutcomeMessage()
+    addGameSquareListener()
   })
-
-  console.log(gameRound)
 
   App.gameroom = App.cable.subscriptions.create({
     channel: 'GameroomChannel',
@@ -64,6 +67,7 @@ $(document).on('turbolinks:load', function () {
       addGameSquareListener()
 
       // Data for validation
+      $('.gameround-p').text(data.gameround)
       $('.currentplayer-p').text(data.currentplayer)
       $('.player-me-p').text(data.playerid)
       $('.player-x-p').text(data.playerx)
@@ -94,10 +98,6 @@ $(document).on('turbolinks:load', function () {
     $('.game-board-form').submit()
   }
 
-  strToGameBoardArray($('#match_gameboard').val())
-
-  populateGameBoard()
-
   function addGameSquareListener () {
     $allGameSquare.off()
     for (var i = 0; i < $allGameSquare.length; i++) {
@@ -107,8 +107,6 @@ $(document).on('turbolinks:load', function () {
       }
     }
   }
-
-  addGameSquareListener()
 
   function addRotateButtonListener () {
     // Assigns rotate tile function to each button using closure
@@ -395,7 +393,6 @@ $(document).on('turbolinks:load', function () {
 
   function getOutcomeMessage () {
     var outcomeMessage = ''
-    console.log(gameRound.outcome)
     switch (gameRound.outcome) {
       case 'T':
         outcomeMessage = "It's a tie!"
@@ -416,6 +413,4 @@ $(document).on('turbolinks:load', function () {
     }
     $('.outcome-message').text(outcomeMessage)
   }
-
-  // getOutcomeMessage()
 })
