@@ -35,5 +35,14 @@ jQuery(document).on 'turbolinks:load', ->
         App.global_chat.send_message textarea.val(), messages.data('chat-room-id')
         textarea.val('')
       e.preventDefault()
-      return false
+      # return false
+          
+    $('#message_body').on 'keypress', (event) -> 
+      if event.keyCode == 13
+        textarea = $('#message_body')
+        if $.trim(textarea.val()).length > 1
+          App.global_chat.send_message textarea.val(), messages.data('chat-room-id')
+          textarea.val('')
+        event.preventDefault()
+        # return false
     
