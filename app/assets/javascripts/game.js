@@ -30,20 +30,19 @@ $(document).on('turbolinks:load', function () {
   var $allRotateButtons = $('.rotate-btn')
 
   // Checking if you're on the gameboard page. Wraps entire JS
-  if ($gameBoardContainer.length !== 0) {
+  if ($gameBoardContainer.data('game-room-id')) {
     $.ajax({
       url: window.location.pathname,
-      async: false,
       dataType: 'json',
       success: function (obj) {
         gameRound.gamestr = obj.match.gameboard
         gameRound.moveindex = obj.match.moveindex
         gameRound.currentplayer = obj.match.currentplayer
-        gameRound.playerid = obj.user
         gameRound.X.id = obj.match.playerx_id
         gameRound.O.id = obj.match.playero_id
         gameRound.outcome = obj.match.outcome
         gameRound.winner = obj.match.winner
+        gameRound.playerid = obj.user
 
         strToGameBoardArray(gameRound.gamestr)
         populateGameBoard()
@@ -62,11 +61,12 @@ $(document).on('turbolinks:load', function () {
     }, {
       received: function (data) {
         // Gameround values from backend
-        gameRound.currentplayer = data.currentplayer
+        gameRound.gamestr = data.gameboard
         gameRound.moveindex = data.moveindex
-        gameRound.outcome = data.outcome
+        gameRound.currentplayer = data.currentplayer
         gameRound.X.id = data.playerx
         gameRound.O.id = data.playero
+        gameRound.outcome = data.outcome
         gameRound.winner = data.winner
 
         strToGameBoardArray(data.gameboard)
@@ -79,7 +79,7 @@ $(document).on('turbolinks:load', function () {
         }
 
         // Data for validation
-        $('.gameround-p').text(data.gameround)
+        $('.gameboard-p').text(data.gameboard)
         $('.moveindex-p').text(data.moveindex)
         $('.currentplayer-p').text(data.currentplayer)
         $('.player-me-p').text(data.playerid)
@@ -107,8 +107,10 @@ $(document).on('turbolinks:load', function () {
     }
 
     $('#match_gameboard').val(str)
-    $('#match_currentplayer').val(gameRound.currentplayer)
     $('#match_moveindex').val(gameRound.moveindex)
+    $('#match_currentplayer').val(gameRound.currentplayer)
+    $('#match_playerx_id').val(gameRound.X.id)
+    $('#match_playero_id').val(gameRound.O.id)
     $('#match_outcome').val(gameRound.outcome)
     $('#match_winner').val(gameRound.winner)
     $('.game-board-form').submit()
@@ -433,9 +435,17 @@ $(document).on('turbolinks:load', function () {
         break
       case 'N':
         if (gameRound.currentplayer === 'X') {
-          outcomeMessage = "White's turn"
+          if (gameRound.moveindex === 'A') {
+            outcomeMessage = 'White: Place a token'
+          } else if (gameRound.moveindex === 'B') {
+            outcomeMessage = 'White: Rotate a tile'
+          }
         } else if (gameRound.currentplayer === 'O') {
-          outcomeMessage = "Black's turn"
+          if (gameRound.moveindex === 'A') {
+            outcomeMessage = 'Black: Place a token'
+          } else if (gameRound.moveindex === 'B') {
+            outcomeMessage = 'Black: Rotate a tile'
+          }
         }
         break
     }

@@ -40,6 +40,7 @@ class MatchesController < ApplicationController
 
         ActionCable.server.broadcast "gameroom_channel_#{@match.id}",
           gameboard:  @match.gameboard,
+          moveindex: @match.moveindex,
           currentplayer: @match.currentplayer,
           playerx:  @match.playerx_id,
           playero: @match.playero_id,
