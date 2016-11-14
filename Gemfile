@@ -32,7 +32,8 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'pry'
-gem 'redis', '~> 3.2'
+# gem 'redis', '~> 3.2'
+gem 'devise-bootstrapped', '~> 0.1.1' 
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
