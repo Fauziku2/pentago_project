@@ -1,89 +1,13 @@
 <h1>Pentago</h1>
 
-<p class="player-x-p"><%= @match.playerx_id %></p>
-<p class="player-o-p"><%= @match.playero_id %></p>
-<p class="currentplayer-p"><%= @match.currentplayer %></p>
-<p class="player-me-me"><%= @user %></p>
-<p class="outcome-p"><%= @match.outcome %></p>
-<p class="winner-p"><%= @match.winner %></p>
-
-
-<%= form_for @match, html: {class: 'game-board-form'}, remote: true do |f| %>
-  <%= render 'form_input', f: f %>
-<% end %>
-
+<p>Player X: <span class="player-x-p"><%= @match.playerx_id %></span></p>
+<p>Player O: <span class="player-o-p"><%= @match.playero_id %></span></p>
+<p>Current Player: <span class="currentplayer-p"><%= @match.currentplayer %></span></p>
+<p>Current User: <span class="player-me-me"><%= @user %></span></p>
+<p>Outcome: <span class="outcome-p"><%= @match.outcome %></span></p>
+<p>Winner: <span class="winner-p"><%= @match.winner %></span></p>
 <%= link_to 'Back', matches_path %>
 
-<div class="game-board-container" data-game-room-id="<%= @match.id %>">
+<%= render 'hidden_gameboard_form' %>
 
-<p class='outcome-message'></p>
-
-<div class="top-btn-container">
-  <div class="rotate-btn top-btn" id="rotate-right-0"></div>
-  <div class="rotate-btn top-btn" id="rotate-left-1"></div>
-</div>
-
-<div class="left-btn-container">
-  <div class="rotate-btn left-btn" id="rotate-left-0"></div>
-  <div class="rotate-btn left-btn" id="rotate-right-2"></div>
-</div>
-
-    <div class="game-board">
-      <div class="game-tile" id="game-tile-0">
-        <div class="game-square" data-row="0" data-col="0"></div>
-        <div class="game-square" data-row="0" data-col="1"></div>
-        <div class="game-square" data-row="0" data-col="2"></div>
-        <div class="game-square" data-row="1" data-col="0"></div>
-        <div class="game-square" data-row="1" data-col="1"></div>
-        <div class="game-square" data-row="1" data-col="2"></div>
-        <div class="game-square" data-row="2" data-col="0"></div>
-        <div class="game-square" data-row="2" data-col="1"></div>
-        <div class="game-square" data-row="2" data-col="2"></div>
-      </div>
-      <div class="game-tile" id="game-tile-1">
-        <div class="game-square" data-row="0" data-col="3"></div>
-        <div class="game-square" data-row="0" data-col="4"></div>
-        <div class="game-square" data-row="0" data-col="5"></div>
-        <div class="game-square" data-row="1" data-col="3"></div>
-        <div class="game-square" data-row="1" data-col="4"></div>
-        <div class="game-square" data-row="1" data-col="5"></div>
-        <div class="game-square" data-row="2" data-col="3"></div>
-        <div class="game-square" data-row="2" data-col="4"></div>
-        <div class="game-square" data-row="2" data-col="5"></div>
-      </div>
-      <div class="game-tile" id="game-tile-2">
-        <div class="game-square" data-row="3" data-col="0"></div>
-        <div class="game-square" data-row="3" data-col="1"></div>
-        <div class="game-square" data-row="3" data-col="2"></div>
-        <div class="game-square" data-row="4" data-col="0"></div>
-        <div class="game-square" data-row="4" data-col="1"></div>
-        <div class="game-square" data-row="4" data-col="2"></div>
-        <div class="game-square" data-row="5" data-col="0"></div>
-        <div class="game-square" data-row="5" data-col="1"></div>
-        <div class="game-square" data-row="5" data-col="2"></div>
-      </div>
-      <div class="game-tile" id="game-tile-3">
-        <div class="game-square" data-row="3" data-col="3"></div>
-        <div class="game-square" data-row="3" data-col="4"></div>
-        <div class="game-square" data-row="3" data-col="5"></div>
-        <div class="game-square" data-row="4" data-col="3"></div>
-        <div class="game-square" data-row="4" data-col="4"></div>
-        <div class="game-square" data-row="4" data-col="5"></div>
-        <div class="game-square" data-row="5" data-col="3"></div>
-        <div class="game-square" data-row="5" data-col="4"></div>
-        <div class="game-square" data-row="5" data-col="5"></div>
-      </div>
-    </div>
-
-    <div class="right-btn-container">
-      <div class="rotate-btn right-btn" id="rotate-right-1"></div>
-      <div class="rotate-btn right-btn" id="rotate-left-3"></div>
-    </div>
-
-    <div class="bottom-btn-container">
-      <div class="rotate-btn bottom-btn" id="rotate-right-3"></div>
-      <div class="rotate-btn bottom-btn" id="rotate-left-2"></div>
-    </div>
-</div>
-
-</div>
+<%= render 'game_board' %>

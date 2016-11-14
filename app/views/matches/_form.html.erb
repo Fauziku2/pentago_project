@@ -1,5 +1,32 @@
 <%= form_for @match do |f| %>
 
-  <%= render 'form_input', f: f %>
+<p>
+  <%= f.label :gameboard %><br>
+  <%= f.text_field :gameboard %>
+</p>
+<p>
+  <%= f.label :currentplayer %><br>
+  <%= f.text_field :currentplayer %>
+</p>
+<p>
+  <%= f.label :playerx_id %><br>
+  <%= f.text_field :playerx_id %>
+</p>
+<p>
+  <%= f.label :playero_id %><br>
+  <%= f.text_field :playero_id %>
+</p>
+<p>
+  <%= f.label :outcome %><br>
+  <%= f.text_field :outcome %>
+</p>
+<p>
+  <%= f.label :winner %><br>
+  <%= f.text_field :winner %>
+</p>
+
+<p>
+  <%= f.submit %>
+</p>
 
 <% end %>

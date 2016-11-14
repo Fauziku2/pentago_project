@@ -8,12 +8,8 @@
     <li><%= @match.playero_id %></li>
     <li><%= @match.outcome %></li>
     <li><%= @match.winner %></li>
+    <li>Your ID: <%= @user %></li>
   </ul>
 
-<%= link_to 'Edit', edit_match_path(@match) %>
-
-<%= form_for @match, html: {class: 'game-join-form'}, url: {action: 'challenge'} do |f| %>
-  <%= render 'form_input', f: f %>
-<% end %>
-
-<%= link_to("Enter Room", challenge_match_path, :method => :patch) %>
+<%= link_to 'Watch Game (edit_path)', edit_match_path(@match) %><br>
+<%= link_to("Challenge! (challenge_path)", challenge_match_path, :method => :patch) %>

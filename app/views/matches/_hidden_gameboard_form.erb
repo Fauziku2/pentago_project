@@ -1,0 +1,9 @@
+<%= form_for @match, html: {class: 'game-board-form'}, remote: true do |f| %>
+    <%= f.hidden_field :gameboard %>
+    <%= f.hidden_field :currentplayer %>
+    <%= f.hidden_field :playerx_id %>
+    <%= f.hidden_field :playero_id %>
+    <%= f.hidden_field :outcome %>
+    <%= f.hidden_field :winner %>
+    <%= f.submit style:"display: none;" %>
+<% end %>

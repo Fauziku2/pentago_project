@@ -27,13 +27,20 @@ $(document).on('turbolinks:load', function () {
   var $allGameSquare = $('.game-square')
   var $allRotateButtons = $('.rotate-btn')
 
-  // Filling up gameround with html data when reload
-  gameRound.currentplayer = $('.currentplayer-p').text()
-  gameRound.playerid = parseInt($('.player-me-me').text())
-  gameRound.X.id = parseInt($('.player-x-p').text())
-  gameRound.O.id = parseInt($('.player-o-p').text())
-  gameRound.outcome = ($('.outcome-p').text())
-  gameRound.winner = ($('.winner-p').text())
+  // Need to clean up URL logic
+  var currentpath = window.location.pathname
+  var slicedpath = currentpath.slice(0, currentpath.length - 5)
+  var jsonPath = slicedpath + '.json'
+
+  $.get(jsonPath, function (obj) {
+    gameRound.currentplayer = obj.match.currentplayer
+    gameRound.playerid = obj.user
+    gameRound.X.id = obj.match.playerx_id
+    gameRound.O.id = obj.match.playero_id
+    gameRound.outcome = obj.match.outcome
+    gameRound.winner = obj.match.winner
+    getOutcomeMessage()
+  })
 
   console.log(gameRound)
 
@@ -51,21 +58,25 @@ $(document).on('turbolinks:load', function () {
       gameRound.outcome = data.outcome
       gameRound.X.id = data.playerx
       gameRound.O.id = data.playero
+      gameRound.winner = data.winner
 
       getOutcomeMessage()
+      addGameSquareListener()
 
       // Data for validation
-      $('.player-x-p').text(data.playerx)
-      $('.player-o-p').text(data.playero)
       $('.currentplayer-p').text(data.currentplayer)
       $('.player-me-p').text(data.playerid)
+      $('.player-x-p').text(data.playerx)
+      $('.player-o-p').text(data.playero)
+      $('.outcome-p').text(data.outcome)
+      $('.winner-p').text(data.winner)
 
       // Updating form
       $('#match_gameboard').val(data.gameboard)
       $('#match_currentplayer').val(data.currentplayer)
-      $('#match_outcome').val(data.outcome)
       $('#match_playerx_id').val(data.playerx)
       $('#match_playero_id').val(data.playero)
+      $('#match_outcome').val(data.outcome)
       $('#match_winner').val(data.winner)
     }
   })
@@ -86,8 +97,6 @@ $(document).on('turbolinks:load', function () {
   strToGameBoardArray($('#match_gameboard').val())
 
   populateGameBoard()
-
-  getOutcomeMessage()
 
   function addGameSquareListener () {
     $allGameSquare.off()
@@ -263,6 +272,7 @@ $(document).on('turbolinks:load', function () {
     }
 
     var totalMatches = 0
+    var playerMove = gameBoard[xCoord][yCoord]
 
     function countMatchesHalfDirection (xCoord, yCoord, xAdjust, yAdjust, direction) {
       if (direction === 'backward') {
@@ -270,7 +280,6 @@ $(document).on('turbolinks:load', function () {
         yAdjust *= -1
       }
 
-      var playerMove = gameBoard[xCoord][yCoord]
       var nextX = xCoord + xAdjust
       var nextY = yCoord + yAdjust
 
@@ -287,8 +296,11 @@ $(document).on('turbolinks:load', function () {
     countMatchesHalfDirection(xCoord, yCoord, xAdjust, yAdjust, 'forward')
     countMatchesHalfDirection(xCoord, yCoord, xAdjust, yAdjust, 'backward')
 
-    if (totalMatches >= 4) {
-      gameRound[gameRound.currentplayer].fiveInARow = true
+    if (totalMatches >= 4 && playerMove === 'X') {
+      gameRound.X.fiveInARow = true
+    }
+    if (totalMatches >= 4 && playerMove === 'O') {
+      gameRound.O.fiveInARow = true
     }
   }
 
@@ -383,6 +395,7 @@ $(document).on('turbolinks:load', function () {
 
   function getOutcomeMessage () {
     var outcomeMessage = ''
+    console.log(gameRound.outcome)
     switch (gameRound.outcome) {
       case 'T':
         outcomeMessage = "It's a tie!"
@@ -403,4 +416,6 @@ $(document).on('turbolinks:load', function () {
     }
     $('.outcome-message').text(outcomeMessage)
   }
+
+  // getOutcomeMessage()
 })

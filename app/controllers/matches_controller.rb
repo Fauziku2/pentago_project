@@ -5,7 +5,15 @@ class MatchesController < ApplicationController
 
   def show
     @match = Match.find(params[:id])
-    @match.playero_id = current_user.id
+    @user = current_user.id
+
+    respond_to do |format|
+      format.html
+      format.json  { render json: {
+          match: @match,
+          user: @user
+        }}
+    end
   end
 
   def new
