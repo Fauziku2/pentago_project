@@ -1,0 +1,45 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+$light-gray: #777;
+
+body {
+  padding-top: 60px;
+  // background-color: solid blue;
+
+}
+
+// background-image:url('/assets/images/background.jpg')
+
+p {
+  font-size: 1.1em;
+  line-height: 1.7em;
+}
+
+action {
+
+}
+
+footer {
+  margin-top: 45px;
+  padding-top: 5px;
+  border-top: 3px solid #777;
+  color: $light-gray;
+  a {
+    color: #555;
+    &:hover {
+      color: #222;
+    }
+  }
+  small {
+    float: left;
+  }
+  ul {
+    float: right;
+    list-style: none;
+
+    li {
+      float: left;
+      margin-left: 15px;
+    }
+  }
+}
