@@ -28,7 +28,6 @@ class MatchesController < ApplicationController
 
   def create
     @match = Match.new(match_params)
-    @chat_room = current_user.chat_rooms.build(chat_room_params)
 
     if @match.save
       # Find match cos build needs database datatype
