@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 20161111072835) do
 
   create_table "chat_rooms", force: :cascade do |t|
@@ -28,6 +29,24 @@ ActiveRecord::Schema.define(version: 20161111072835) do
     t.datetime "updated_at",   null: false
     t.index ["chat_room_id"], name: "index_messages_on_chat_room_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
+  create_table "matches", force: :cascade do |t|
+    t.string   "gameboard",     default: "000000000000000000000000000000000000"
+    t.string   "currentplayer", default: "X"
+    t.string   "moveindex",     default: "A"
+    t.integer  "playerx_id"
+    t.integer  "playero_id"
+    t.string   "outcome",       default: "N"
+    t.integer  "winner"
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
+  end
+
+  create_table "seeks", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+
   end
 
   create_table "users", force: :cascade do |t|
