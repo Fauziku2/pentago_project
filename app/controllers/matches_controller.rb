@@ -31,6 +31,7 @@ class MatchesController < ApplicationController
     @chat_room = current_user.chat_rooms.build(chat_room_params)
 
     if @match.save
+      # Find match cos build needs database datatype
       match = Match.find(@match.id)
       @chat_room = match.build_chat_room(title: "title")
       @chat_room.save
