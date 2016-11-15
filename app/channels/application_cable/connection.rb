@@ -1,9 +1,22 @@
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
-    # identified_by :uuid # ID of a connection, currently is random, but should make it from the user ID. Can access in channels
-    #
-    # def connect
-    #   self.uuid = SecureRandom.uuid
-    # end
+
+    identified_by :current_user
+
+    def connect
+      self.current_user = find_verified_user
+      logger.add_tags 'ActionCable', current_user.email
+    end
+
+    protected
+
+    def find_verified_user # this checks whether a user is authenticated with devise
+      if verified_user = env['warden'].user
+        verified_user
+      else
+        reject_unauthorized_connection
+      end
+    end
+
   end
 end
