@@ -26,6 +26,7 @@ class MatchesController < ApplicationController
 
   def create
     @match = Match.new(match_params)
+    @chat_room = current_user.chat_rooms.build(chat_room_params)
 
     if @match.save
       redirect_to @match
@@ -81,5 +82,10 @@ class MatchesController < ApplicationController
   def match_params
     params.require(:match).permit(:gameboard, :moveindex, :currentplayer, :playerx_id, :playero_id, :outcome, :winner)
   end
+
+  def chat_room_params
+    params.require(:match).permit(:title)
+  end
+
 
 end
