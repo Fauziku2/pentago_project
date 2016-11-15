@@ -6,8 +6,10 @@ class MatchesController < ApplicationController
 
   def show
     @match = Match.find(params[:id])
+    @chat_room = @match.chat_room
     @user = current_user.id
-    @chat_room = ChatRoom.includes(:messages).find_by(id: params[:id])
+
+    # @chat_room = ChatRoom.includes(:messages).find_by(id: params[:id])
     @message = Message.new
 
     respond_to do |format|
@@ -28,6 +30,9 @@ class MatchesController < ApplicationController
     @match = Match.new(match_params)
 
     if @match.save
+      match = Match.find(@match.id)
+      @chat_room = match.build_chat_room(title: "title")
+      @chat_room.save
       redirect_to @match
     else
       render 'new'
@@ -80,6 +85,10 @@ class MatchesController < ApplicationController
   private
   def match_params
     params.require(:match).permit(:gameboard, :moveindex, :currentplayer, :playerx_id, :playero_id, :outcome, :winner)
+  end
+
+  def chat_room_params
+    params.require(:chat_room).permit(:title)
   end
 
 end

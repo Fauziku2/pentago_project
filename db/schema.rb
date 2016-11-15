@@ -14,10 +14,10 @@ ActiveRecord::Schema.define(version: 20161111072835) do
 
   create_table "chat_rooms", force: :cascade do |t|
     t.string   "title"
-    t.integer  "user_id"
+    t.integer  "match_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_chat_rooms_on_user_id"
+    t.index ["match_id"], name: "index_chat_rooms_on_match_id"
   end
 
   create_table "matches", force: :cascade do |t|
