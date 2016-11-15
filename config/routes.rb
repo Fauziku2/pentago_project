@@ -13,6 +13,14 @@ Rails.application.routes.draw do
   sign_up: 'register'
 }
 
+  resources :matches, except: [:edit] do
+    member do
+      patch 'challenge', to: 'matches#challenge'
+    end
+  end
+
+  mount ActionCable.server, at: '/cable'
+
   resources :users, :static_pages
   root "users#home"
   # root "static_pages#about"
