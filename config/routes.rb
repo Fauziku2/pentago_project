@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   # root "static_pages#about"
   resources :chat_rooms, only: [:new, :create, :show, :index]
 
-  mount ActionCable.server => '/cable'
-  
+  # mount ActionCable.server => '/cable'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
