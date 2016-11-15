@@ -1,0 +1,15 @@
+Auto-merging db/schema.rb
+CONFLICT (content): Merge conflict in db/schema.rb
+Auto-merging config/routes.rb
+Auto-merging app/models/user.rb
+CONFLICT (content): Merge conflict in app/models/user.rb
+Auto-merging app/controllers/application_controller.rb
+CONFLICT (content): Merge conflict in app/controllers/application_controller.rb
+Auto-merging app/channels/application_cable/connection.rb
+CONFLICT (content): Merge conflict in app/channels/application_cable/connection.rb
+Auto-merging app/assets/stylesheets/application.css
+Auto-merging app/assets/javascripts/application.js
+CONFLICT (content): Merge conflict in app/assets/javascripts/application.js
+Auto-merging Gemfile.lock
+Auto-merging Gemfile
+Automatic merge failed; fix conflicts and then commit the result.
