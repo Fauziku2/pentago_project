@@ -5,17 +5,11 @@
   <% @availablematches.each do |match| %>
   <div class="col-md-3">
     <ul>
-      <li><%= match.id %></li>
-      <li>playerX: <%= match.playerx_id %></li>
-      <li>playerO: <%= match.playero_id %></li>
-      <li>Move Index: <%= match.moveindex %></li>
-      <li>Outcome: <%= match.outcome %></li>
-      <li>Winner: <%= match.winner %></li>
+      <li><%= match.playerx.name  %></li>
 
       <%= link_to 'Destroy', match_path(match),
       method: :delete, data: { confirm: 'Are you sure?' } %>
     </ul>
-    <%= link_to 'Enter Room', match_path(match) %><br>
     <%= link_to("Challenge!", challenge_match_path(match), :method => :patch) %>
   </div>
   <% end %>
@@ -26,18 +20,13 @@
   <% @livematches.each do |match| %>
   <div class="col-md-3">
     <ul>
-      <li><%= match.id %></li>
-      <li>playerX: <%= match.playerx_id %></li>
-      <li>playerO: <%= match.playero_id %></li>
-      <li>Move Index: <%= match.moveindex %></li>
-      <li>Outcome: <%= match.outcome %></li>
-      <li>Winner: <%= match.winner %></li>
+      <li><%= match.playerx.name  %></li>
+      <li><%= match.playero.name  %></li>
 
       <%= link_to 'Destroy', match_path(match),
       method: :delete, data: { confirm: 'Are you sure?' } %>
     </ul>
-    <%= link_to 'Enter Room', match_path(match) %><br>
-    <%= link_to("Challenge!", challenge_match_path(match), :method => :patch) %>
+    <%= link_to 'Watch Game', match_path(match) %><br>
   </div>
   <% end %>
 <% end %>
