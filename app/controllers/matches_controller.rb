@@ -7,6 +7,8 @@ class MatchesController < ApplicationController
   def show
     @match = Match.find(params[:id])
     @user = current_user.id
+    @chat_room = ChatRoom.includes(:messages).find_by(id: params[:id])
+    @message = Message.new
 
     respond_to do |format|
       format.html
