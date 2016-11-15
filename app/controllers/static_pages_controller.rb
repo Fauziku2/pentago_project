@@ -19,4 +19,5 @@ class StaticPagesController < ApplicationController
 
   def game_page
   end
+
 end

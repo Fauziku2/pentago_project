@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   # get 'static_pages/signup'
 
   get 'static_pages/about'
-
   get 'static_pages/instructions'
+  get '/profile', to: 'users#home'
 
   devise_for :users, path: '', path_names: {
   sign_in: 'login',

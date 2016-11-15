@@ -1,0 +1,32 @@
+<% provide(:title, "Profile Page") %>
+<h1>Profile - Statistics</h1>
+
+<h3>
+  Hi <strong><%= current_user.name%></strong>,
+</h3>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6"><strong>Description:</strong></div>
+    <div class="col-md-6"><strong>Remarks:</strong></div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">Games Played:</div>
+    <div class="col-md-6"><%= @total_matches%></div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">Won Played:</div>
+    <div class="col-md-6"><%= @total_win%>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">Lost Played:</div>
+    <div class="col-md-6"><%= @total_lost%></div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">Draw Played:</div>
+    <div class="col-md-6"><%= @total_tie%></div>
+  </div>
+</div>
+<%= link_to "Edit profile", edit_user_registration_path, method:
+:get, class: "btn btn-danger" %>
