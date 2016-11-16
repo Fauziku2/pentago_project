@@ -10,7 +10,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  def name
-    email.split('@')[0]
-  end
+  # def name
+  #   email.split('@')[0]
+  # end
 end
