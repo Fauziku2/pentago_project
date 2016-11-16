@@ -13,13 +13,16 @@ $(document).on('turbolinks:load', function () {
     'currentplayer': '',
     'playerid': 0,
     'moveindex': '',
+    'movestarttime': 0, // In millisecond format
     'X': {
       'id': 0,
-      'fiveInARow': false
+      'fiveInARow': false,
+      'timebank': 0
     },
     'O': {
       'id': 0,
-      'fiveInARow': false
+      'fiveInARow': false,
+      'timebank': 0
     },
     'outcome': '',
     'winner': ''
@@ -43,6 +46,13 @@ $(document).on('turbolinks:load', function () {
         gameRound.outcome = obj.match.outcome
         gameRound.winner = obj.match.winner
         gameRound.playerid = obj.user
+
+        gameRound.X.timebank = obj.match.xtimebank
+        gameRound.O.timebank = obj.match.otimebank
+        gameRound.movestarttime = Date.parse(obj.match.move_start_time)
+
+        $('.x-timebank').text(gameRound.X.timebank)
+        $('.o-timebank').text(gameRound.O.timebank)
 
         strToGameBoardArray(gameRound.gamestr)
         populateGameBoard()
@@ -69,18 +79,20 @@ $(document).on('turbolinks:load', function () {
         gameRound.outcome = data.outcome
         gameRound.winner = data.winner
 
+        gameRound.X.timebank = data.xtimebank
+        gameRound.O.timebank = data.otimebank
+        gameRound.movestarttime = Date.parse(data.move_start_time)
+
         strToGameBoardArray(data.gameboard)
         populateGameBoard()
         getOutcomeMessage()
+
         if (gameRound.moveindex === 'A') {
+          clearInterval(timer) // Can code to remove the timer message
+          countdownTimer() // Starts timer on player toggle (Always move A)
           addGameSquareListener()
         } else if (gameRound.moveindex === 'B') {
           addRotateButtonListener()
-        }
-
-        clearInterval(timer) // Can code to remove the timer message
-        if (gameRound.outcome === 'N') {
-          countdownTimer()
         }
 
         // Updating form
@@ -91,30 +103,67 @@ $(document).on('turbolinks:load', function () {
         $('#match_playero_id').val(data.playero)
         $('#match_outcome').val(data.outcome)
         $('#match_winner').val(data.winner)
+
+        $('#match_xtimebank').val(gameRound.X.timebank)
+        $('#match_otimebank').val(gameRound.O.timebank)
+        $('#match_move_start_time').val(Date(gameRound.movestarttime))
       }
     })
   }
 
+  /*
+  Receive
+  I am player X, ID = 1
+  1) gameBoard.X.timebank = val from database
+  2) gameBoard.start-time = val from database
+  3) Run the set interval function that clocks down the time from timebank. No database operation
+
+  Submit
+  1) clearInterval(timer)
+  2) Update X timebank (Value calculated from currentTime - startTime)
+  3) Update starttime
+
+  Expire - Sua
+  1) Update gameRound.outcome = 'X' / 'O'
+  2) Update gameRound.winner = gameRound.X.id
+  3) Submit form
+  */
+
+  function calcTimeSpent () {
+    // Fires on rotateboard to update current players timebank
+
+    // Gets difference between current time and starting time to return time spent on the move itself
+    var secondsSpent = Math.round((Date.now() - gameRound.movestarttime) / 1000) + 3
+    console.log(secondsSpent)
+    // Needs to update gameRound.starttime to submit to database
+    gameRound[gameRound.currentplayer].timebank -= secondsSpent
+
+    gameRound.movestarttime = Date.now() // Update movestarttime to send to other player
+
+    $('.x-timebank').text(gameRound.X.timebank)
+    $('.o-timebank').text(gameRound.O.timebank)
+  }
+
   var timer
   function countdownTimer () {
-    var timeLimit = 20
+    var timebank = gameRound[gameRound.currentplayer].timebank
 
     timer = setInterval(function () {
-      if (timeLimit === 0) {
-        $('.game-timer').text('TIME UP')
-        timeLimit = 20
-
-        if (gameRound.moveindex === 'A') {
-          $allGameSquare.off()
-        } else if (gameRound.moveindex === 'B') {
-          $allRotateButtons.off()
+      if (timebank === 0) {
+        $('.game-timer-' + gameRound.currentplayer).text('TIME UP')
+        // Current player loses
+        if (gameRound.currentplayer === 'X') {
+          gameRound.outcome = 'O'
+          gameRound.winner = gameRound.O.id
+        } else {
+          gameRound.outcome = 'X'
+          gameRound.winner = gameRound.X.id
         }
-        gameRound.moveindex = 'A'
-        togglePlayer()
         updateFormInputAndSubmit()
       } else {
-        $('.game-timer').text(timeLimit)
-        timeLimit -= 1
+        $('.game-timer-' + gameRound.currentplayer).text(timebank)
+        timebank -= 1
+        // This DOESN'T update the variable
       }
     }, 1000)
   }
@@ -132,6 +181,13 @@ $(document).on('turbolinks:load', function () {
     $('#match_playero_id').val(gameRound.O.id)
     $('#match_outcome').val(gameRound.outcome)
     $('#match_winner').val(gameRound.winner)
+
+    // Either form submit problems
+    // Or gameRound update problems
+    $('#match_xtimebank').val(gameRound.X.timebank)
+    $('#match_otimebank').val(gameRound.O.timebank)
+    $('#match_move_start_time').val(Date(gameRound.movestarttime))
+
     $('.game-board-form').submit()
   }
 
@@ -266,6 +322,8 @@ $(document).on('turbolinks:load', function () {
         }
         $allRotateButtons.off()
         // addGameSquareListener() // Handled by broadcast
+
+        calcTimeSpent()
 
         togglePlayer()
         toggleMoveIndex()

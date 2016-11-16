@@ -43,7 +43,7 @@ class MatchesController < ApplicationController
 
     if (@match.playero_id.blank? == true && @match.playerx_id != current_user.id)
 
-      if @match.update_attribute(:playero_id, current_user.id)
+      if @match.update_attributes(playero_id: current_user.id, move_start_time: DateTime.now)
         ActionCable.server.broadcast "gameroom_channel_#{@match.id}",
           gameboard:  @match.gameboard,
           moveindex: @match.moveindex,
@@ -51,7 +51,12 @@ class MatchesController < ApplicationController
           playerx:  @match.playerx_id,
           playero: @match.playero_id,
           outcome: @match.outcome,
-          winner: @match.winner
+          winner: @match.winner,
+
+          xtimebank: @match.xtimebank,
+          otimebank: @match.otimebank,
+          move_start_time: @match.move_start_time
+
       end
       redirect_to match_path
     end
@@ -69,7 +74,11 @@ class MatchesController < ApplicationController
                                    playero: @match.playero_id,
                                    outcome: @match.outcome,
                                    winner: @match.winner,
-                                   playerid: current_user.id
+                                   playerid: current_user.id,
+
+                                   xtimebank: @match.xtimebank,
+                                   otimebank: @match.otimebank,
+                                   move_start_time: @match.move_start_time
       head :ok
     end
   end
@@ -83,7 +92,7 @@ class MatchesController < ApplicationController
 
   private
   def match_params
-    params.require(:match).permit(:gameboard, :moveindex, :currentplayer, :playerx_id, :playero_id, :outcome, :winner)
+    params.require(:match).permit(:gameboard, :moveindex, :currentplayer, :playerx_id, :playero_id, :outcome, :winner, :xtimebank, :otimebank, :move_start_time)
   end
 
   def chat_room_params

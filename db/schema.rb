@@ -20,15 +20,18 @@ ActiveRecord::Schema.define(version: 20161111072835) do
   end
 
   create_table "matches", force: :cascade do |t|
-    t.string   "gameboard",     default: "000000000000000000000000000000000000"
-    t.string   "currentplayer", default: "X"
-    t.string   "moveindex",     default: "A"
+    t.string   "gameboard",       default: "000000000000000000000000000000000000"
+    t.string   "currentplayer",   default: "X"
+    t.string   "moveindex",       default: "A"
     t.integer  "playerx_id"
     t.integer  "playero_id"
-    t.string   "outcome",       default: "N"
+    t.string   "outcome",         default: "N"
     t.integer  "winner"
-    t.datetime "created_at",                                                     null: false
-    t.datetime "updated_at",                                                     null: false
+    t.integer  "xtimebank",       default: 300
+    t.integer  "otimebank",       default: 300
+    t.datetime "move_start_time"
+    t.datetime "created_at",                                                       null: false
+    t.datetime "updated_at",                                                       null: false
   end
 
   create_table "messages", force: :cascade do |t|

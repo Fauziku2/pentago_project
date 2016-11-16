@@ -8,6 +8,9 @@ class CreateMatches < ActiveRecord::Migration[5.0]
       t.integer :playero_id, default: nil
       t.string :outcome, default: 'N'
       t.integer :winner
+      t.integer :xtimebank, default: 300
+      t.integer :otimebank, default: 300
+      t.datetime :move_start_time
 
       t.timestamps
     end
