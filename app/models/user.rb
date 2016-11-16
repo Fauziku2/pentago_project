@@ -37,7 +37,9 @@ class User < ApplicationRecord
   end
 
   def WinningPercentage(userid)
-    return (TotalWin(userid)/TotalGames(userid)*100)
+    if TotalGames(userid) > 0
+      return (TotalWin(userid)/TotalGames(userid)*100)
+    end
   end
 
   def PlayerLevel(userid)
