@@ -35,14 +35,3 @@ User.create(
     password: '1234567',
     name: 'Git Master'
     )
-
-chatroom_list = [
-  "Ironman",
-  "Wonderwoman",
-  "Batman",
-  "Superman"
-]
-
-chatroom_list.each do |title|
-  ChatRoom.create( title: title )
-end
