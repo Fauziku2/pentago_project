@@ -73,20 +73,15 @@ $(document).on('turbolinks:load', function () {
         populateGameBoard()
         getOutcomeMessage()
         if (gameRound.moveindex === 'A') {
-          addGameSquareListener()  // Can remove the functions in the player moves?
+          addGameSquareListener()
         } else if (gameRound.moveindex === 'B') {
           addRotateButtonListener()
         }
 
-        // Data for validation
-        $('.gameboard-p').text(data.gameboard)
-        $('.moveindex-p').text(data.moveindex)
-        $('.currentplayer-p').text(data.currentplayer)
-        $('.player-me-p').text(data.playerid)
-        $('.player-x-p').text(data.playerx)
-        $('.player-o-p').text(data.playero)
-        $('.outcome-p').text(data.outcome)
-        $('.winner-p').text(data.winner)
+        clearInterval(timer) // Can code to remove the timer message
+        if (gameRound.outcome === 'N') {
+          countdownTimer()
+        }
 
         // Updating form
         $('#match_gameboard').val(data.gameboard)
@@ -98,6 +93,30 @@ $(document).on('turbolinks:load', function () {
         $('#match_winner').val(data.winner)
       }
     })
+  }
+
+  var timer
+  function countdownTimer () {
+    var timeLimit = 10
+
+    timer = setInterval(function () {
+      if (timeLimit === 0) {
+        $('.game-timer').text('TIME UP')
+        timeLimit = 10
+
+        if (gameRound.moveindex === 'A') {
+          $allGameSquare.off()
+        } else if (gameRound.moveindex === 'B') {
+          $allRotateButtons.off()
+        }
+        gameRound.moveindex = 'A'
+        togglePlayer()
+        updateFormInputAndSubmit()
+      } else {
+        $('.game-timer').text(timeLimit)
+        timeLimit -= 1
+      }
+    }, 1000)
   }
 
   function updateFormInputAndSubmit () {
@@ -153,7 +172,7 @@ $(document).on('turbolinks:load', function () {
         $(this).addClass(gameRound.currentplayer)
 
         $allGameSquare.off()
-        addRotateButtonListener()
+        // addRotateButtonListener() // Handled by broadcast
 
         toggleMoveIndex()
         checkWinCondition(xCoord, yCoord)
@@ -245,7 +264,7 @@ $(document).on('turbolinks:load', function () {
           }
         }
         $allRotateButtons.off()
-        addGameSquareListener()
+        // addGameSquareListener() // Handled by broadcast
 
         togglePlayer()
         toggleMoveIndex()

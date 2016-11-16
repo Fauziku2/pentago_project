@@ -1,21 +1,11 @@
 <div class="row">
   <div class="col-md-8">
 
-      <!-- <h1>Pentago</h1> -->
-
-      <!-- <p>Gameround: <span class="gameboard-p"><%= @match.gameboard %></span></p> -->
-      <!-- <p>Move index: <span class="moveindex-p"><%= @match.moveindex %></span></p> -->
-      <!-- <p>Player X: <span class="player-x-p"><%= @match.playerx_id %></span></p> -->
-      <!-- <p>Player O: <span class="player-o-p"><%= @match.playero_id %></span></p> -->
-      <!-- <p>Current Player: <span class="currentplayer-p"><%= @match.currentplayer %></span></p> -->
-      <!-- <p>Current User: <span class="player-me-p"><%= @user %></span></p> -->
-      <!-- <p>Outcome: <span class="outcome-p"><%= @match.outcome %></span></p> -->
-      <!-- <p>Winner: <span class="winner-p"><%= @match.winner %></span></p> -->
-
-      <!-- <%= link_to 'Back', matches_path %> -->
+      <%= @match.playerx.name %>
 
       <%= render 'hidden_gameboard_form' %>
       <%= render 'game_board' %>
+      <%= render 'game_timer' %>
 
   </div>
 
