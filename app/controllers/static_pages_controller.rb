@@ -12,12 +12,12 @@ class StaticPagesController < ApplicationController
   # end
 
   def instructions
+
   end
 
   def about
+  
   end
 
-  def game_page
-  end
 
 end

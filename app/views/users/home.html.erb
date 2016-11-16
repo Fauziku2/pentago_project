@@ -1,31 +1,37 @@
 <% provide(:title, "Profile Page") %>
-<h1>Profile - Statistics</h1>
+<h1>Hi <%= current_user.name%>, your online statistics:</h1>
 
-<h3>
-  Hi <strong><%= current_user.name%></strong>,
-</h3>
+
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-6"><strong>Description:</strong></div>
-    <div class="col-md-6"><strong>Remarks:</strong></div>
+    <div class="col-md-6"><h3>Description:</h3></div>
+    <div class="col-md-6"><h3>Remarks:</h3></div>
   </div>
   <div class="row">
-    <div class="col-md-6">Games Played:</div>
-    <div class="col-md-6"><%= @total_matches%></div>
+    <div class="col-md-6">Total Games Played:</div>
+    <div class="col-md-6"><%=current_user.TotalGames(current_user.id)%></div>
   </div>
   <div class="row">
-    <div class="col-md-6">Won Played:</div>
-    <div class="col-md-6"><%= @total_win%>
+    <div class="col-md-6">Total Games Won:</div>
+    <div class="col-md-6"><%=current_user.TotalWin(current_user.id)%>
 
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6">Lost Played:</div>
-    <div class="col-md-6"><%= @total_lost%></div>
+    <div class="col-md-6">Total Games Lost:</div>
+    <div class="col-md-6"> <%=current_user.AllLost(current_user.id)%></div>
   </div>
   <div class="row">
-    <div class="col-md-6">Draw Played:</div>
-    <div class="col-md-6"><%= @total_tie%></div>
+    <div class="col-md-6">Total Games Draw:</div>
+    <div class="col-md-6"> <%=current_user.AllDraw(current_user.id)%></div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">Winning Percentage (%):</div>
+    <div class="col-md-6"><%= current_user.WinningPercentage(current_user.id)%></div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">Player Level:</div>
+    <div class="col-md-6"><%=current_user.PlayerLevel(current_user.id)%> </div>
   </div>
 </div>
 <%= link_to "Edit profile", edit_user_registration_path, method:

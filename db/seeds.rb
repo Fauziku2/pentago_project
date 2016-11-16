@@ -6,43 +6,29 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-User.create(
-    email: 'Terence@gmail.com',
-    password: '1234567',
-    name: 'Terence'
-    )
-
-User.create(
-    email: 'Terencejr1@gmail.com',
-    password: '1234567',
-    name: 'Terence Jr 1'
-    )
-
-User.create(
-    email: 'Terencejr2@gmail.com',
-    password: '1234567',
-    name: 'Terence Jr 2'
-    )
-
-User.create(
-    email: 'Terencejr3@gmail.com',
-    password: '1234567',
-    name: 'Terence Jr 3'
-    )
-
-User.create(
-    email: 'gitmaster@gmail.com',
-    password: '1234567',
-    name: 'Git Master'
-    )
-
-chatroom_list = [
-  "Ironman",
-  "Wonderwoman",
-  "Batman",
-  "Superman"
-]
-
-chatroom_list.each do |title|
-  ChatRoom.create( title: title )
+10.times do |i|
+  User.create(email:"test#{i+1}@gmail.com", name:"test#{i+1}", password:"1234567")
 end
+
+# TH: OUTCOME = O FOR OVER, D FOR DRAW
+
+15.times do |i|
+    a=rand(1..5)
+    b=rand(6..10)
+   Match.create(playerx_id:a, playero_id:b, outcome:"X", winner:a)
+end
+
+15.times do |i|
+    a=rand(6..10)
+    b=rand(1..5)
+   Match.create(playerx_id:a, playero_id:b, outcome:"O", winner:b)
+end
+
+# 3.times do |i|
+#   Match.create(playerx_id:"#{i}", playero_id:"#{i+1}", outcome:"O", winner:"#{i}")
+# end
+
+Match.create(playerx_id:5, playero_id:8, outcome:"T", winner:"")
+Match.create(playerx_id:5, playero_id:9, outcome:"T", winner:"")
+Match.create(playerx_id:6, playero_id:9, outcome:"T", winner:"")
+Match.create(playerx_id:7, playero_id:9, outcome:"T", winner:"")

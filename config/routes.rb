@@ -3,8 +3,8 @@ Rails.application.routes.draw do
   #
   # get 'static_pages/signup'
 
-  get 'static_pages/about'
-  get 'static_pages/instructions'
+  get '/about', to: 'static_pages#about'
+  get '/instructions', to: 'static_pages#instructions'
   get '/profile', to: 'users#home'
 
   devise_for :users, path: '', path_names: {
@@ -20,8 +20,9 @@ Rails.application.routes.draw do
   end
 
   resources :users, :static_pages
-  root "users#home"
+  # root "users#home"
   # root "static_pages#about"
+  root "matches#index"
   resources :chat_rooms, only: [:new, :create, :show, :index]
 
   mount ActionCable.server => '/cable'
