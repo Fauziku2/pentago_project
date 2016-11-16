@@ -97,12 +97,12 @@ $(document).on('turbolinks:load', function () {
 
   var timer
   function countdownTimer () {
-    var timeLimit = 10
+    var timeLimit = 20
 
     timer = setInterval(function () {
       if (timeLimit === 0) {
         $('.game-timer').text('TIME UP')
-        timeLimit = 10
+        timeLimit = 20
 
         if (gameRound.moveindex === 'A') {
           $allGameSquare.off()
@@ -160,7 +160,8 @@ $(document).on('turbolinks:load', function () {
   }
 
   function placeToken () {
-    if (gameRound.playerid === gameRound[gameRound.currentplayer].id && gameRound.outcome === 'N') {
+    // If (I'm current player) && (game is ongoing) && (there is opponent for first move)
+    if (gameRound.playerid === gameRound[gameRound.currentplayer].id && gameRound.outcome === 'N' && gameRound.O.id) {
       // If cell is populated
       if (!$(this).hasClass('X') && !$(this).hasClass('O')) {
         // Gets rows and col index from HTML divs

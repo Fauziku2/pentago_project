@@ -70,7 +70,7 @@ class MatchesController < ApplicationController
                                    outcome: @match.outcome,
                                    winner: @match.winner,
                                    playerid: current_user.id
-      # head :ok
+      head :ok
     end
   end
 
