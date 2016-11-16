@@ -1,16 +1,41 @@
-<h1>Pentago</h1>
+<div class="row">
+  <div class="col-md-8">
 
-<p>Gameround: <span class="gameboard-p"><%= @match.gameboard %></span></p>
-<p>Move index: <span class="moveindex-p"><%= @match.moveindex %></span></p>
-<p>Player X: <span class="player-x-p"><%= @match.playerx_id %></span></p>
-<p>Player O: <span class="player-o-p"><%= @match.playero_id %></span></p>
-<p>Current Player: <span class="currentplayer-p"><%= @match.currentplayer %></span></p>
-<p>Current User: <span class="player-me-p"><%= @user %></span></p>
-<p>Outcome: <span class="outcome-p"><%= @match.outcome %></span></p>
-<p>Winner: <span class="winner-p"><%= @match.winner %></span></p>
+      <!-- <h1>Pentago</h1> -->
 
-<%= link_to 'Back', matches_path %>
+      <!-- <p>Gameround: <span class="gameboard-p"><%= @match.gameboard %></span></p> -->
+      <!-- <p>Move index: <span class="moveindex-p"><%= @match.moveindex %></span></p> -->
+      <!-- <p>Player X: <span class="player-x-p"><%= @match.playerx_id %></span></p> -->
+      <!-- <p>Player O: <span class="player-o-p"><%= @match.playero_id %></span></p> -->
+      <!-- <p>Current Player: <span class="currentplayer-p"><%= @match.currentplayer %></span></p> -->
+      <!-- <p>Current User: <span class="player-me-p"><%= @user %></span></p> -->
+      <!-- <p>Outcome: <span class="outcome-p"><%= @match.outcome %></span></p> -->
+      <!-- <p>Winner: <span class="winner-p"><%= @match.winner %></span></p> -->
 
-<%= render 'hidden_gameboard_form' %>
+      <!-- <%= link_to 'Back', matches_path %> -->
 
-<%= render 'game_board' %>
+      <%= render 'hidden_gameboard_form' %>
+      <%= render 'game_board' %>
+
+  </div>
+
+  <div class="col-md-4">
+    <div class="message-wr">
+      <div id="messages" class="messages" data-chat-room-id="<%= @chat_room.id %>">
+        <div id="messages-table" class="messages-table">
+          <%= render @chat_room.messages %>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= form_for @message, url: '#' do |f| %>
+        <%= hidden_field_tag 'chat_room_id', @chat_room.id %>
+        <!-- <%= f.label :body %> -->
+        <%= f.text_area :body, class: 'form-control' %>
+        <small class="text-muted">From 2 to 1000 characters</small>
+        <!-- <%= f.submit "Post", class: 'btn btn-primary btn-lg' %> -->
+      <% end %>
+    </div>
+  </div>
+</div>
