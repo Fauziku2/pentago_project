@@ -1,6 +1,6 @@
 production:
   adapter: redis
-  url: redis://localhost:6379/1
+  url:  redis://redistogo:35db8ee6f20f906e7748f735cdc3ecb0@viperfish.redistogo.com:11335/
 
 development:
   adapter: async
