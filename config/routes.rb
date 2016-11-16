@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   end
 
   resources :users
-  root "users#home"
+  root "matches#index"
 
   resources :chat_rooms, only: [:show]
 

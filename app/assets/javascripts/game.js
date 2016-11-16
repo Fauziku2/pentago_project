@@ -73,7 +73,7 @@ $(document).on('turbolinks:load', function () {
         populateGameBoard()
         getOutcomeMessage()
         if (gameRound.moveindex === 'A') {
-          addGameSquareListener()
+          addGameSquareListener()  // Can remove the functions in the player moves?
         } else if (gameRound.moveindex === 'B') {
           addRotateButtonListener()
         }

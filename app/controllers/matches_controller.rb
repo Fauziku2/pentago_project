@@ -40,10 +40,10 @@ class MatchesController < ApplicationController
 
   def challenge
     @match = Match.find(params[:id])
-    # Add this validation to a model
-    if @match.playero_id.blank?
-      if @match.update_attribute(:playero_id, current_user.id)
 
+    if (@match.playero_id.blank? == true && @match.playerx_id != current_user.id)
+
+      if @match.update_attribute(:playero_id, current_user.id)
         ActionCable.server.broadcast "gameroom_channel_#{@match.id}",
           gameboard:  @match.gameboard,
           moveindex: @match.moveindex,
