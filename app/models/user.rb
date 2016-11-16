@@ -81,7 +81,7 @@ class User < ApplicationRecord
 
     end
 
-    if AllLost(userid)==TotalGames(userid)
+    if AllLost(userid)==TotalGames(userid) && TotalGames(userid) > 0
       @player_level = -1
     end
 
