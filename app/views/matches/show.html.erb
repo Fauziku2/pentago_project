@@ -1,7 +1,14 @@
 <div class="row">
   <div class="col-md-8">
 
-      <%= @match.playerx.name %>
+      <h1>White:
+        <%= @match.playerx.name %>
+      </h1>
+      <% if @match.playero %>
+      <h1>Black:
+        <%= @match.playero.name %>
+      </h1>
+      <% end %>
 
       <%= render 'hidden_gameboard_form' %>
       <%= render 'game_board' %>

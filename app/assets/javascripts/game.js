@@ -9,11 +9,11 @@ $(document).on('turbolinks:load', function () {
   ]
 
   var gameRound = {
+    'id': 0,
     'gamestr': '',
     'currentplayer': '',
     'playerid': 0,
     'moveindex': '',
-    'movestarttime': 0, // In millisecond format
     'X': {
       'id': 0,
       'fiveInARow': false,
@@ -38,6 +38,8 @@ $(document).on('turbolinks:load', function () {
       url: window.location.pathname,
       dataType: 'json',
       success: function (obj) {
+        console.log(obj)
+        gameRound.id = obj.match.id
         gameRound.gamestr = obj.match.gameboard
         gameRound.moveindex = obj.match.moveindex
         gameRound.currentplayer = obj.match.currentplayer
@@ -46,13 +48,11 @@ $(document).on('turbolinks:load', function () {
         gameRound.outcome = obj.match.outcome
         gameRound.winner = obj.match.winner
         gameRound.playerid = obj.user
-
         gameRound.X.timebank = obj.match.xtimebank
         gameRound.O.timebank = obj.match.otimebank
-        gameRound.movestarttime = Date.parse(obj.match.move_start_time)
 
-        $('.x-timebank').text(gameRound.X.timebank)
-        $('.o-timebank').text(gameRound.O.timebank)
+        $('.timebank-X').text(gameRound.X.timebank)
+        $('.timebank-O').text(gameRound.O.timebank)
 
         strToGameBoardArray(gameRound.gamestr)
         populateGameBoard()
@@ -61,6 +61,10 @@ $(document).on('turbolinks:load', function () {
           addGameSquareListener()
         } else if (gameRound.moveindex === 'B') {
           addRotateButtonListener()
+        }
+
+        if (gameRound.O.id) {
+          countdownTimer()
         }
       }
     })
@@ -71,6 +75,7 @@ $(document).on('turbolinks:load', function () {
     }, {
       received: function (data) {
         // Gameround values from backend
+        gameRound.id = data.id
         gameRound.gamestr = data.gameboard
         gameRound.moveindex = data.moveindex
         gameRound.currentplayer = data.currentplayer
@@ -81,15 +86,14 @@ $(document).on('turbolinks:load', function () {
 
         gameRound.X.timebank = data.xtimebank
         gameRound.O.timebank = data.otimebank
-        gameRound.movestarttime = Date.parse(data.move_start_time)
 
         strToGameBoardArray(data.gameboard)
         populateGameBoard()
         getOutcomeMessage()
 
         if (gameRound.moveindex === 'A') {
-          clearInterval(timer) // Can code to remove the timer message
-          countdownTimer() // Starts timer on player toggle (Always move A)
+          clearInterval(timer)
+          countdownTimer()
           addGameSquareListener()
         } else if (gameRound.moveindex === 'B') {
           addRotateButtonListener()
@@ -103,54 +107,17 @@ $(document).on('turbolinks:load', function () {
         $('#match_playero_id').val(data.playero)
         $('#match_outcome').val(data.outcome)
         $('#match_winner').val(data.winner)
-
         $('#match_xtimebank').val(gameRound.X.timebank)
         $('#match_otimebank').val(gameRound.O.timebank)
-        $('#match_move_start_time').val(Date(gameRound.movestarttime))
       }
     })
   }
 
-  /*
-  Receive
-  I am player X, ID = 1
-  1) gameBoard.X.timebank = val from database
-  2) gameBoard.start-time = val from database
-  3) Run the set interval function that clocks down the time from timebank. No database operation
-
-  Submit
-  1) clearInterval(timer)
-  2) Update X timebank (Value calculated from currentTime - startTime)
-  3) Update starttime
-
-  Expire - Sua
-  1) Update gameRound.outcome = 'X' / 'O'
-  2) Update gameRound.winner = gameRound.X.id
-  3) Submit form
-  */
-
-  function calcTimeSpent () {
-    // Fires on rotateboard to update current players timebank
-
-    // Gets difference between current time and starting time to return time spent on the move itself
-    var secondsSpent = Math.round((Date.now() - gameRound.movestarttime) / 1000) + 3
-    console.log(secondsSpent)
-    // Needs to update gameRound.starttime to submit to database
-    gameRound[gameRound.currentplayer].timebank -= secondsSpent
-
-    gameRound.movestarttime = Date.now() // Update movestarttime to send to other player
-
-    $('.x-timebank').text(gameRound.X.timebank)
-    $('.o-timebank').text(gameRound.O.timebank)
-  }
-
   var timer
   function countdownTimer () {
-    var timebank = gameRound[gameRound.currentplayer].timebank
-
     timer = setInterval(function () {
-      if (timebank === 0) {
-        $('.game-timer-' + gameRound.currentplayer).text('TIME UP')
+      if (gameRound[gameRound.currentplayer].timebank === 0) {
+        $('.timebank-' + gameRound.currentplayer).text('TIME UP')
         // Current player loses
         if (gameRound.currentplayer === 'X') {
           gameRound.outcome = 'O'
@@ -159,11 +126,15 @@ $(document).on('turbolinks:load', function () {
           gameRound.outcome = 'X'
           gameRound.winner = gameRound.X.id
         }
+        clearInterval(timer)
         updateFormInputAndSubmit()
       } else {
-        $('.game-timer-' + gameRound.currentplayer).text(timebank)
-        timebank -= 1
-        // This DOESN'T update the variable
+        $('.timebank-' + gameRound.currentplayer).text(gameRound[gameRound.currentplayer].timebank)
+        gameRound[gameRound.currentplayer].timebank -= 1
+
+        if (gameRound[gameRound.currentplayer].timebank % 12 === 0) {
+          updateFormInputAndSubmit()
+        }
       }
     }, 1000)
   }
@@ -182,11 +153,8 @@ $(document).on('turbolinks:load', function () {
     $('#match_outcome').val(gameRound.outcome)
     $('#match_winner').val(gameRound.winner)
 
-    // Either form submit problems
-    // Or gameRound update problems
     $('#match_xtimebank').val(gameRound.X.timebank)
     $('#match_otimebank').val(gameRound.O.timebank)
-    $('#match_move_start_time').val(Date(gameRound.movestarttime))
 
     $('.game-board-form').submit()
   }
@@ -322,8 +290,6 @@ $(document).on('turbolinks:load', function () {
         }
         $allRotateButtons.off()
         // addGameSquareListener() // Handled by broadcast
-
-        calcTimeSpent()
 
         togglePlayer()
         toggleMoveIndex()
