@@ -14,6 +14,7 @@ class User < ApplicationRecord
   #   email.split('@')[0]
   # end
 
+
   def TotalWin(userid)
    Match.where(["winner = #{userid}"]).count
   end
