@@ -60,7 +60,6 @@ $(document).on('turbolinks:load', function () {
       game_room_id: $gameBoardContainer.data('game-room-id')
     }, {
       received: function (data) {
-        console.log('broadcast received')
         // Gameround values from backend
         gameRound.gamestr = data.gameboard
         gameRound.moveindex = data.moveindex

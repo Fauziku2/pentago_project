@@ -13,7 +13,7 @@
  *= require_tree .
  *= require_self
  */
- body { padding-top: 50px;}
+ body { padding-top: 65px;}
  footer {margin-top: 100px;}
  table, td, th { vertical-align: middle; border:none;}
  th {border-bottom: 1px solid #DDD;}
@@ -21,9 +21,9 @@
  .game-board-container {
    height: 400px;
    width: 400px;
-   float: right;
-   position: relative;
-   bottom: 200px;
+   /*position: relative;*/
+   margin: 0 auto;
+
  }
 
  .right-container {

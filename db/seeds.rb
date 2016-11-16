@@ -18,6 +18,7 @@ end
    Match.create(playerx_id:a, playero_id:b, outcome:"X", winner:a)
 end
 
+
 15.times do |i|
     a=rand(6..10)
     b=rand(1..5)

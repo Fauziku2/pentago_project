@@ -1,7 +1,11 @@
 class MatchesController < ApplicationController
   def index
     @availablematches = Match.where(playero_id:nil)
+
     @livematches = Match.where(outcome:'N').where.not(playero_id:nil)
+
+    @match = Match.new
+    @match.playerx_id = current_user.id
   end
 
   def show
@@ -9,7 +13,6 @@ class MatchesController < ApplicationController
     @chat_room = @match.chat_room
     @user = current_user.id
 
-    # @chat_room = ChatRoom.includes(:messages).find_by(id: params[:id])
     @message = Message.new
 
     respond_to do |format|
@@ -21,22 +24,17 @@ class MatchesController < ApplicationController
     end
   end
 
-  def new
-    @match = Match.new
-    @match.playerx_id = current_user.id
-  end
-
   def create
     @match = Match.new(match_params)
 
     if @match.save
       # Find match cos build needs database datatype
       match = Match.find(@match.id)
-      @chat_room = match.build_chat_room(title: "title")
+      @chat_room = match.build_chat_room()
       @chat_room.save
       redirect_to @match
     else
-      render 'new'
+      render 'index'
     end
   end
 
