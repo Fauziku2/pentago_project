@@ -3,9 +3,9 @@ Rails.application.routes.draw do
   #
   # get 'static_pages/signup'
 
-  get 'static_pages/about'
-
-  get 'static_pages/instructions'
+  get '/about', to: 'static_pages#about'
+  get '/instructions', to: 'static_pages#instructions'
+  get '/profile', to: 'users#home'
 
   devise_for :users, path: '', path_names: {
   sign_in: 'login',
@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   root "matches#index"
 
   resources :chat_rooms, only: [:show]
+
 
   mount ActionCable.server => '/cable'
 

@@ -12,9 +12,11 @@ class StaticPagesController < ApplicationController
   # end
 
   def instructions
+
   end
 
   def about
+
   end
 
 end
