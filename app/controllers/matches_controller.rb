@@ -81,6 +81,13 @@ class MatchesController < ApplicationController
     end
   end
 
+  def destroy
+    @match = Match.find(params[:id])
+    @match.destroy
+
+    redirect_to matches_path
+  end
+
   private
   def match_params
     params.require(:match).permit(:gameboard, :moveindex, :currentplayer, :playerx_id, :playero_id, :outcome, :winner, :xtimebank, :otimebank)

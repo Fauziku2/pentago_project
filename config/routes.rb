@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   sign_up: 'register'
 }
 
-  resources :matches, except: [:edit, :new, :delete] do
+  resources :matches, except: [:edit, :new] do
     member do
       patch 'challenge', to: 'matches#challenge'
     end

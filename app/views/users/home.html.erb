@@ -1,38 +1,101 @@
 <% provide(:title, "Profile Page") %>
-<h1>Hi <%= current_user.name%>, your online statistics:</h1>
+<div>
+  <h1 class="statHead">Hi <%= current_user.name%>, your online statistics:</h1>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+
+      <th><h3>Description:</h3></th>
+      <th><h3>Remarks:</h3></th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+
+      <!-- <th scope="row"></th> -->
+      <td>Total Games Played:</td>
+      <td><%=current_user.TotalGames(current_user.id)%></td>
+
+    </tr>
+    <tr>
+
+      <!-- <th scope="row"></th> -->
+      <td>Total Games Won:</td>
+      <td><%=current_user.TotalWin(current_user.id)%></td>
+
+    </tr>
+    <tr>
+      <!-- <th scope="row"></th> -->
+      <td>Total Games Lost:</td>
+      <td><%=current_user.AllLost(current_user.id)%></td>
+
+    </tr>
+
+    <tr>
+      <!-- <th scope="row"></th> -->
+      <td>Total Games Draw:</td>
+      <td><%=current_user.AllDraw(current_user.id)%></td>
+
+    </tr>
+
+    <tr>
+      <!-- <th scope="row"></th> -->
+      <td>Winning Percentage (%):</td>
+      <td><%= current_user.WinningPercentage(current_user.id)%></td>
+
+    </tr>
+
+    <tr>
+      <!-- <th scope="row"></th> -->
+      <td>Player Level:</td>
+      <td><%=current_user.PlayerLevel(current_user.id)%></td>
+
+    </tr>
 
 
+  </tbody>
+</table>
+
+<%= link_to "Edit profile", edit_user_registration_path, method:
+:get, class: "btn btn-danger" %>
+
+
+
+
+
+<!--
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-6"><h3>Description:</h3></div>
-    <div class="col-md-6"><h3>Remarks:</h3></div>
+    <div class="col-md-6"></div>
+    <div class="col-md-6"></div>
   </div>
   <div class="row">
-    <div class="col-md-6">Total Games Played:</div>
-    <div class="col-md-6"><%=current_user.TotalGames(current_user.id)%></div>
+    <div class="col-md-6"></div>
+    <div class="col-md-6">/div>
   </div>
   <div class="row">
-    <div class="col-md-6">Total Games Won:</div>
-    <div class="col-md-6"><%=current_user.TotalWin(current_user.id)%>
+    <div class="col-md-6"></div>
+    <div class="col-md-6">
 
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6">Total Games Lost:</div>
-    <div class="col-md-6"> <%=current_user.AllLost(current_user.id)%></div>
+    <div class="col-md-6"></div>
+    <div class="col-md-6"> </div>
   </div>
   <div class="row">
-    <div class="col-md-6">Total Games Draw:</div>
-    <div class="col-md-6"> <%=current_user.AllDraw(current_user.id)%></div>
+    <div class="col-md-6"></div>
+    <div class="col-md-6"> </div>
   </div>
   <div class="row">
-    <div class="col-md-6">Winning Percentage (%):</div>
-    <div class="col-md-6"><%= current_user.WinningPercentage(current_user.id)%></div>
+    <div class="col-md-6"></div>
+    <div class="col-md-6"></div>
   </div>
   <div class="row">
-    <div class="col-md-6">Player Level:</div>
-    <div class="col-md-6"><%=current_user.PlayerLevel(current_user.id)%> </div>
+    <div class="col-md-6"></div>
+    <div class="col-md-6"> </div>
   </div>
-</div>
-<%= link_to "Edit profile", edit_user_registration_path, method:
-:get, class: "btn btn-danger" %>
+</div> -->
