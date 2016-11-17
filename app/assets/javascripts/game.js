@@ -38,7 +38,6 @@ $(document).on('turbolinks:load', function () {
       url: window.location.pathname,
       dataType: 'json',
       success: function (obj) {
-        console.log(obj)
         gameRound.id = obj.match.id
         gameRound.gamestr = obj.match.gameboard
         gameRound.moveindex = obj.match.moveindex
@@ -63,7 +62,7 @@ $(document).on('turbolinks:load', function () {
           addRotateButtonListener()
         }
 
-        if (gameRound.O.id) {
+        if (gameRound.O.id && gameRound.outcome === 'N') {
           countdownTimer()
         }
       }
@@ -87,15 +86,22 @@ $(document).on('turbolinks:load', function () {
         gameRound.X.timebank = data.xtimebank
         gameRound.O.timebank = data.otimebank
 
+        $('.player-o-name').text(data.playeroname)
+        
         strToGameBoardArray(data.gameboard)
         populateGameBoard()
         getOutcomeMessage()
 
-        if (gameRound.moveindex === 'A') {
+
+        if (gameRound.outcome !== 'N') {
+          clearInterval(timer)
+        }
+
+        if (gameRound.moveindex === 'A' && gameRound.playerid === gameRound[gameRound.currentplayer].id) {
           clearInterval(timer)
           countdownTimer()
           addGameSquareListener()
-        } else if (gameRound.moveindex === 'B') {
+        } else if (gameRound.moveindex === 'B' && gameRound.playerid === gameRound[gameRound.currentplayer].id) {
           addRotateButtonListener()
         }
 

@@ -54,7 +54,8 @@ class MatchesController < ApplicationController
           outcome: @match.outcome,
           winner: @match.winner,
           xtimebank: @match.xtimebank,
-          otimebank: @match.otimebank
+          otimebank: @match.otimebank,
+          playeroname: @match.playero.name
       end
       redirect_to match_path
     end
