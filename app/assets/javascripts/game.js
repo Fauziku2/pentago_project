@@ -31,6 +31,7 @@ $(document).on('turbolinks:load', function () {
   var $gameBoardContainer = $('.game-board-container')
   var $allGameSquare = $('.game-square')
   var $allRotateButtons = $('.rotate-btn')
+  var audioNotification = new Audio('/assets/pop.mp3')
 
   // Checking if you're on the gameboard page. Wraps entire JS
   if ($gameBoardContainer.data('game-room-id')) {
@@ -50,8 +51,8 @@ $(document).on('turbolinks:load', function () {
         gameRound.X.timebank = obj.match.xtimebank
         gameRound.O.timebank = obj.match.otimebank
 
-        $('.timebank-X').text(gameRound.X.timebank)
-        $('.timebank-O').text(gameRound.O.timebank)
+        $('.timebank-X-' + gameRound.id).text(gameRound.X.timebank)
+        $('.timebank-O-' + gameRound.id).text(gameRound.O.timebank)
 
         strToGameBoardArray(gameRound.gamestr)
         populateGameBoard()
@@ -74,6 +75,10 @@ $(document).on('turbolinks:load', function () {
     }, {
       received: function (data) {
         // Gameround values from backend
+        if (gameRound.currentplayer !== data.currentplayer) {
+          audioNotification.play()
+        }
+
         gameRound.id = data.id
         gameRound.gamestr = data.gameboard
         gameRound.moveindex = data.moveindex
@@ -87,11 +92,10 @@ $(document).on('turbolinks:load', function () {
         gameRound.O.timebank = data.otimebank
 
         $('.player-o-name').text(data.playeroname)
-        
+
         strToGameBoardArray(data.gameboard)
         populateGameBoard()
         getOutcomeMessage()
-
 
         if (gameRound.outcome !== 'N') {
           clearInterval(timer)
@@ -123,7 +127,7 @@ $(document).on('turbolinks:load', function () {
   function countdownTimer () {
     timer = setInterval(function () {
       if (gameRound[gameRound.currentplayer].timebank === 0) {
-        $('.timebank-' + gameRound.currentplayer).text('TIME UP')
+        $('.timebank-' + gameRound.currentplayer + '-' + gameRound.id).text('TIME UP')
         // Current player loses
         if (gameRound.currentplayer === 'X') {
           gameRound.outcome = 'O'
@@ -135,7 +139,7 @@ $(document).on('turbolinks:load', function () {
         clearInterval(timer)
         updateFormInputAndSubmit()
       } else {
-        $('.timebank-' + gameRound.currentplayer).text(gameRound[gameRound.currentplayer].timebank)
+        $('.timebank-' + gameRound.currentplayer + '-' + gameRound.id).text(gameRound[gameRound.currentplayer].timebank)
         gameRound[gameRound.currentplayer].timebank -= 1
 
         if (gameRound[gameRound.currentplayer].timebank % 12 === 0) {
@@ -146,12 +150,12 @@ $(document).on('turbolinks:load', function () {
   }
 
   function updateFormInputAndSubmit () {
-    var str = ''
+    gameRound.gamestr = ''
     for (var i = 0; i < 6; i++) {
-      str += gameBoard[i].join('')
+      gameRound.gamestr += gameBoard[i].join('')
     }
 
-    $('#match_gameboard').val(str)
+    $('#match_gameboard').val(gameRound.gamestr)
     $('#match_moveindex').val(gameRound.moveindex)
     $('#match_currentplayer').val(gameRound.currentplayer)
     $('#match_playerx_id').val(gameRound.X.id)
