@@ -19,10 +19,8 @@ Rails.application.routes.draw do
     end
   end
 
-
-  resources :users, :static_pages
-
-  root "users#home"
+  resources :users
+  root "matches#index"
 
   resources :chat_rooms, only: [:show]
 

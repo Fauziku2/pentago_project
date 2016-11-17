@@ -9,17 +9,20 @@ $(document).on('turbolinks:load', function () {
   ]
 
   var gameRound = {
+    'id': 0,
     'gamestr': '',
     'currentplayer': '',
     'playerid': 0,
     'moveindex': '',
     'X': {
       'id': 0,
-      'fiveInARow': false
+      'fiveInARow': false,
+      'timebank': 0
     },
     'O': {
       'id': 0,
-      'fiveInARow': false
+      'fiveInARow': false,
+      'timebank': 0
     },
     'outcome': '',
     'winner': ''
@@ -35,6 +38,8 @@ $(document).on('turbolinks:load', function () {
       url: window.location.pathname,
       dataType: 'json',
       success: function (obj) {
+        console.log(obj)
+        gameRound.id = obj.match.id
         gameRound.gamestr = obj.match.gameboard
         gameRound.moveindex = obj.match.moveindex
         gameRound.currentplayer = obj.match.currentplayer
@@ -43,6 +48,11 @@ $(document).on('turbolinks:load', function () {
         gameRound.outcome = obj.match.outcome
         gameRound.winner = obj.match.winner
         gameRound.playerid = obj.user
+        gameRound.X.timebank = obj.match.xtimebank
+        gameRound.O.timebank = obj.match.otimebank
+
+        $('.timebank-X').text(gameRound.X.timebank)
+        $('.timebank-O').text(gameRound.O.timebank)
 
         strToGameBoardArray(gameRound.gamestr)
         populateGameBoard()
@@ -51,6 +61,10 @@ $(document).on('turbolinks:load', function () {
           addGameSquareListener()
         } else if (gameRound.moveindex === 'B') {
           addRotateButtonListener()
+        }
+
+        if (gameRound.O.id) {
+          countdownTimer()
         }
       }
     })
@@ -61,6 +75,7 @@ $(document).on('turbolinks:load', function () {
     }, {
       received: function (data) {
         // Gameround values from backend
+        gameRound.id = data.id
         gameRound.gamestr = data.gameboard
         gameRound.moveindex = data.moveindex
         gameRound.currentplayer = data.currentplayer
@@ -69,24 +84,20 @@ $(document).on('turbolinks:load', function () {
         gameRound.outcome = data.outcome
         gameRound.winner = data.winner
 
+        gameRound.X.timebank = data.xtimebank
+        gameRound.O.timebank = data.otimebank
+
         strToGameBoardArray(data.gameboard)
         populateGameBoard()
         getOutcomeMessage()
+
         if (gameRound.moveindex === 'A') {
+          clearInterval(timer)
+          countdownTimer()
           addGameSquareListener()
         } else if (gameRound.moveindex === 'B') {
           addRotateButtonListener()
         }
-
-        // Data for validation
-        $('.gameboard-p').text(data.gameboard)
-        $('.moveindex-p').text(data.moveindex)
-        $('.currentplayer-p').text(data.currentplayer)
-        $('.player-me-p').text(data.playerid)
-        $('.player-x-p').text(data.playerx)
-        $('.player-o-p').text(data.playero)
-        $('.outcome-p').text(data.outcome)
-        $('.winner-p').text(data.winner)
 
         // Updating form
         $('#match_gameboard').val(data.gameboard)
@@ -96,8 +107,36 @@ $(document).on('turbolinks:load', function () {
         $('#match_playero_id').val(data.playero)
         $('#match_outcome').val(data.outcome)
         $('#match_winner').val(data.winner)
+        $('#match_xtimebank').val(gameRound.X.timebank)
+        $('#match_otimebank').val(gameRound.O.timebank)
       }
     })
+  }
+
+  var timer
+  function countdownTimer () {
+    timer = setInterval(function () {
+      if (gameRound[gameRound.currentplayer].timebank === 0) {
+        $('.timebank-' + gameRound.currentplayer).text('TIME UP')
+        // Current player loses
+        if (gameRound.currentplayer === 'X') {
+          gameRound.outcome = 'O'
+          gameRound.winner = gameRound.O.id
+        } else {
+          gameRound.outcome = 'X'
+          gameRound.winner = gameRound.X.id
+        }
+        clearInterval(timer)
+        updateFormInputAndSubmit()
+      } else {
+        $('.timebank-' + gameRound.currentplayer).text(gameRound[gameRound.currentplayer].timebank)
+        gameRound[gameRound.currentplayer].timebank -= 1
+
+        if (gameRound[gameRound.currentplayer].timebank % 12 === 0) {
+          updateFormInputAndSubmit()
+        }
+      }
+    }, 1000)
   }
 
   function updateFormInputAndSubmit () {
@@ -113,6 +152,10 @@ $(document).on('turbolinks:load', function () {
     $('#match_playero_id').val(gameRound.O.id)
     $('#match_outcome').val(gameRound.outcome)
     $('#match_winner').val(gameRound.winner)
+
+    $('#match_xtimebank').val(gameRound.X.timebank)
+    $('#match_otimebank').val(gameRound.O.timebank)
+
     $('.game-board-form').submit()
   }
 
@@ -141,7 +184,8 @@ $(document).on('turbolinks:load', function () {
   }
 
   function placeToken () {
-    if (gameRound.playerid === gameRound[gameRound.currentplayer].id && gameRound.outcome === 'N') {
+    // If (I'm current player) && (game is ongoing) && (there is opponent for first move)
+    if (gameRound.playerid === gameRound[gameRound.currentplayer].id && gameRound.outcome === 'N' && gameRound.O.id) {
       // If cell is populated
       if (!$(this).hasClass('X') && !$(this).hasClass('O')) {
         // Gets rows and col index from HTML divs
@@ -153,7 +197,7 @@ $(document).on('turbolinks:load', function () {
         $(this).addClass(gameRound.currentplayer)
 
         $allGameSquare.off()
-        addRotateButtonListener()
+        // addRotateButtonListener() // Handled by broadcast
 
         toggleMoveIndex()
         checkWinCondition(xCoord, yCoord)
@@ -245,7 +289,7 @@ $(document).on('turbolinks:load', function () {
           }
         }
         $allRotateButtons.off()
-        addGameSquareListener()
+        // addGameSquareListener() // Handled by broadcast
 
         togglePlayer()
         toggleMoveIndex()
