@@ -182,3 +182,20 @@
  #rotate-left-3 {
    background-image: url('right-bottom-arrow.png');
  }
+
+ .navbar-inverse .navbar-brand {
+     color: white;
+     font-family: 'Patua One', cursive;
+     font-size: 25px;
+     letter-spacing: 5px;
+ }
+
+ .go {
+   color: #00bfff;
+ }
+
+ .editor {
+    .wrap-guide {
+        visibility: hidden;
+    }
+}
