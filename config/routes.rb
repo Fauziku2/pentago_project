@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  # get 'static_pages/login'
-  #
-  # get 'static_pages/signup'
 
   get '/about', to: 'static_pages#about'
   get '/instructions', to: 'static_pages#instructions'
@@ -13,7 +10,7 @@ Rails.application.routes.draw do
   sign_up: 'register'
 }
 
-  resources :matches, except: [:edit, :new] do
+  resources :matches, except: [:edit, :new, :delete] do
     member do
       patch 'challenge', to: 'matches#challenge'
     end

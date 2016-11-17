@@ -1,8 +1,8 @@
 class MatchesController < ApplicationController
   def index
-    @availablematches = Match.where(playero_id:nil)
+    @availablematches = Match.where(playero_id:nil).first(10)
 
-    @livematches = Match.where(outcome:'N').where.not(playero_id:nil)
+    @livematches = Match.where(outcome:'N').where.not(playero_id:nil).last(10)
 
     @match = Match.new
     @match.playerx_id = current_user.id
@@ -79,13 +79,6 @@ class MatchesController < ApplicationController
                                    otimebank: @match.otimebank
       head :ok
     end
-  end
-
-  def destroy
-    @match = Match.find(params[:id])
-    @match.destroy
-
-    redirect_to matches_path
   end
 
   private

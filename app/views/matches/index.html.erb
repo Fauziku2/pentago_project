@@ -6,9 +6,6 @@
   <div class="col-md-3">
     <ul>
       <li><%= match.playerx.name  %></li>
-
-      <%= link_to 'Destroy', match_path(match),
-      method: :delete, data: { confirm: 'Are you sure?' } %>
     </ul>
     <%= link_to("Challenge!", challenge_match_path(match), :method => :patch) %>
   </div>
@@ -22,9 +19,6 @@
     <ul>
       <li><%= match.playerx.name  %></li>
       <li><%= match.playero.name  %></li>
-
-      <%= link_to 'Destroy', match_path(match),
-      method: :delete, data: { confirm: 'Are you sure?' } %>
     </ul>
     <%= link_to 'Watch Game', match_path(match) %><br>
   </div>
