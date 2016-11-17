@@ -109,7 +109,7 @@
   text-align: center;
   width: 50%;
   border: 1px solid black;
-  margin: 0 auto;
+  margin: 10px auto;
   .outcome-message {
     margin: 3px;
   }
@@ -123,17 +123,20 @@
   }
 }
 
-.player-x {
+.player-dashboard {
+  margin: 20px 0;
+  .player-x {
     background-color: white;
     color: black;
     // color: #00bfff;
+  }
+  .player-o {
+    background-color: #00bfff;
+    background-color: black;
+    color: white;
+  }
 }
 
-.player-o {
-  background-color: #00bfff;
-  background-color: black;
-  color: white;
-}
 
 .game-room {
   width: 90%;

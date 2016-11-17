@@ -10,7 +10,7 @@
     <%= render 'hidden_gameboard_form' %>
     <%= render 'game_board' %>
 
-    <div class="row">
+    <div class="player-dashboard row">
 
       <div class="player-div player-x col-md-6">
         <h3>White:
@@ -53,9 +53,6 @@
         <%= hidden_field_tag 'chat_room_id', @chat_room.id %>
         <%= f.text_area :body, class: 'form-control' %>
       <% end %>
-    </div>
-    <div class="chatBlock">
-
     </div>
 
   </div>
