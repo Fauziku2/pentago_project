@@ -2,7 +2,44 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.newMatch {
+.availableMatch {
+  text-align: center;
+}
 
-  color: grey;
+.newMatch {
+  margin: 0 auto;
+  padding: 0 2%;
+  // border: 1px solid black;
+  width: 20%;
+  float: left;
+  padding-bottom: 5px;
+}
+
+.match-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.single-match-container {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid black;
+  background:rgba(0,0,0,0.2);
+}
+
+.challengeList {
+  list-style-type: none;
+}
+
+.row.matchPage {
+  // border: 1px solid black;
+  margin: 0 auto;
+}
+
+.nameMatch {
+  // text-align: center;
+}
+
+.asdf {
+  margin: 0 auto;
 }

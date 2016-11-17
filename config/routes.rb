@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  # get 'static_pages/login'
-  #
-  # get 'static_pages/signup'
 
   get '/about', to: 'static_pages#about'
   get '/instructions', to: 'static_pages#instructions'

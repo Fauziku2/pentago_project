@@ -97,7 +97,7 @@ $(document).on('turbolinks:load', function () {
         gameRound.O.timebank = data.otimebank
 
         // When game player O joins and gameboard is empty. Added side effect of reminding first player to make a move. One time event
-        if (gameRound.O.id && gameRound.gamestr === '000000000000000000000000000000000000') {
+        if (gameRound.O.id && gameRound.X.id === gameRound.playerid && gameRound.gamestr === '000000000000000000000000000000000000') {
           audioNotification.play()
         }
 
@@ -132,7 +132,18 @@ $(document).on('turbolinks:load', function () {
         $('#match_otimebank').val(gameRound.O.timebank)
       }
     })
+
+    if (!gameRound.O.id) {
+      window.onbeforeunload = function () {
+        $.ajax({
+          type: 'DELETE',
+          url: window.location.pathname
+        })
+      }
+    }
+
   }
+
 
   var timer
   function countdownTimer () {
@@ -199,8 +210,6 @@ $(document).on('turbolinks:load', function () {
         }
     }
   }
-
-
 
   function addRotateButtonListener () {
     // Assigns rotate tile function to each button using closure

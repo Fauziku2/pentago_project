@@ -21,6 +21,7 @@
 
  .message-container {
    width: 95%;
+   padding-top: 5px;
  }
 
  #message_body {
@@ -31,4 +32,8 @@
    overflow-x: hidden;
    overflow-y: auto;
    word-wrap: break-word;
+ }
+
+ .chatBlock {
+   padding-top: 10px;
  }
