@@ -127,14 +127,16 @@ $(document).on('turbolinks:load', function () {
   function countdownTimer () {
     timer = setInterval(function () {
       if (gameRound[gameRound.currentplayer].timebank === 0) {
-        $('.timebank-' + gameRound.currentplayer + '-' + gameRound.id).text('TIME UP')
+        $('.timebank-' + gameRound.currentplayer + '-' + gameRound.id).text('Time\'s up!')
         // Current player loses
         if (gameRound.currentplayer === 'X') {
           gameRound.outcome = 'O'
           gameRound.winner = gameRound.O.id
+          gameRound.X.timebank = 0
         } else {
           gameRound.outcome = 'X'
           gameRound.winner = gameRound.X.id
+          gameRound.O.timebank = 0
         }
         clearInterval(timer)
         updateFormInputAndSubmit()
