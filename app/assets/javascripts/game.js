@@ -132,16 +132,6 @@ $(document).on('turbolinks:load', function () {
         $('#match_otimebank').val(gameRound.O.timebank)
       }
     })
-
-    if (!gameRound.O.id) {
-      window.onbeforeunload = function () {
-        $.ajax({
-          type: 'DELETE',
-          url: window.location.pathname
-        })
-      }
-    }
-
   }
 
 
