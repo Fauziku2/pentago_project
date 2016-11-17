@@ -199,3 +199,13 @@
         visibility: hidden;
     }
 }
+
+.isText {
+  list-style-type: square;
+  padding-bottom: 10px;
+}
+
+.instructionsHead{
+  text-align: center;
+  font-weight: bold
+}
