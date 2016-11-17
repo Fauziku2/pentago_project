@@ -1,21 +1,27 @@
 <%= render 'hidden_create_form' %>
 
-<h2>Available Matches</h2>
-<% if @availablematches %>
-  <% @availablematches.each do |match| %>
-  <div class="col-md-3">
-    <ul>
-      <li><%= match.playerx.name  %></li>
+<div class = "well well-lg availableMatch"><h2>Available Matches</h2></div>
 
-      <%= link_to 'Destroy', match_path(match),
-      method: :delete, data: { confirm: 'Are you sure?' } %>
-    </ul>
-    <%= link_to("Challenge!", challenge_match_path(match), :method => :patch) %>
-  </div>
+
+  <% if @availablematches %>
+    <% @availablematches.each do |match| %>
+    <div class="col-md-3 newMatch">
+      <ul>
+        <li><%= match.playerx.name  %></li>
+
+        <%= link_to 'Destroy', match_path(match),
+        method: :delete, data: { confirm: 'Are you sure?' } %>
+        <li><%= link_to("Challenge!", challenge_match_path(match), :method => :patch) %></li>
+      </ul>
+      <!-- <%= link_to("Challenge!", challenge_match_path(match), :method => :patch) %> -->
+    </div>
+    <% end %>
   <% end %>
-<% end %>
+</div>
+
 
 <h2 class="col-md-12">Live Matches</h2>
+<!-- <div class = "well well-lg availableMatch"><h2>Live Match</h2></div> -->
 <% if @livematches %>
   <% @livematches.each do |match| %>
   <div class="col-md-3">
