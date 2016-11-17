@@ -1,27 +1,41 @@
 <div class="row">
 
+  <div class="totalTop">
 
-  <div class="col-md-3">
+  </div>
 
-    <h1>White:
+  <div class="col-md-2">
+
+    <div class="messageTextTop">
+
+    </div>
+
+
+    <h3 class='outcome-message'></h3>
+    <br>
+    <br>
+    <h3>White:
       <span class="player-x-name">
         <%= @match.playerx.name %>
       </span>
-
-    </h1>
-
-    <h1>Black:
+    </h3>
+    <h3>timer:
+      <span class="timebank-X"></span>
+    </h3>
+  <br>
+  <br>
+    <h3>Black:
       <span class="player-o-name">
         <% if @match.playero %>
           <%= @match.playero.name %>
         <% end %>
       </span>
-    </h1>
+    </h3>
+    <h3>timer:
+      <span class="timebank-O"></span>
+    </h3>
 
-
-
-
-    <%= render 'game_timer' %>
+    <!-- <%= render 'game_timer' %> -->
 
   </div>
 
@@ -52,7 +66,10 @@
 
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-4">
+    <div class="messageTop">
+
+    </div>
     <div class="message-wr">
       <div id="messages" class="messages" data-chat-room-id="<%= @chat_room.id %>">
         <div id="messages-table" class="messages-table">
@@ -69,6 +86,9 @@
         <small class="text-muted">From 2 to 1000 characters</small>
         <!-- <%= f.submit "Post", class: 'btn btn-primary btn-lg' %> -->
       <% end %>
+    </div>
+    <div class="messageBottom">
+
     </div>
   </div>
 </div>

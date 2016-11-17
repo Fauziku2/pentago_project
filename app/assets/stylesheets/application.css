@@ -19,8 +19,8 @@
  th {border-bottom: 1px solid #DDD;}
 
  .game-board-container {
-   height: 400px;
-   width: 400px;
+   height: 450px;
+   width: 450px;
    /*position: relative;*/
    margin: 0 auto;
 
@@ -198,4 +198,29 @@
     .wrap-guide {
         visibility: hidden;
     }
+}
+
+.messageTop {
+  height: 45px;
+}
+
+.messageBottom {
+  height: 50px;
+}
+
+.messageTextTop {
+  height: 40px;
+}
+
+.totalTop {
+  height: 10px;
+}
+
+.rulesList {
+  list-style-type: square;
+}
+
+
+.rulesText {
+  padding-bottom: 10px;
 }
