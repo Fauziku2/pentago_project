@@ -1,0 +1,197 @@
+.game-board-container {
+  height: 400px;
+  width: 400px;
+  margin: 0 auto;
+}
+
+.right-container {
+  width: 100%;
+}
+
+.game-board {
+  height: 80%;
+  width: 80%;
+  margin: 0 auto;
+  float: left;
+}
+
+.game-tile {
+  border: 1px solid rgb(255, 255, 255);
+  height: 50%;
+  width: 50%;
+  float: left;
+  background-color: grey;
+  /*background-color: rgb(129, 46, 46);*/
+  /*background-image: url('wood-with-light-background.jpg');*/
+  opacity: 0.9;
+  border-radius: 5px;
+}
+
+.rotate-tile-right {
+  transition: all 0.8s ease;
+  transform: rotate(90deg);
+}
+
+.rotate-tile-left {
+  transition: all 0.8s ease;
+  transform: rotate(-90deg);
+}
+
+.game-square {
+  border: 0.5px solid #4f4e4d;
+  height: 33.33%;
+  width: 33.33%;
+  float: left;
+  font-size: 60px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 3px;
+}
+
+.top-btn-container {
+  position: relative;
+}
+
+.top-btn-container, .bottom-btn-container {
+  height: 10%;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.top-btn, .bottom-btn {
+  display: block;
+}
+
+.left-btn-container, .right-btn-container {
+  float: left;
+  height: 80%;
+  width: 10%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.X, .O, .hoverX, .hoverO {
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.X {
+  background-image: url('white_dot.png');
+}
+
+.O {
+  background-image: url('black_dot.png');
+}
+
+.hoverX {
+  background-image: url('white_dot.png');
+  opacity: 0.75;
+}
+
+.hoverO {
+  background-image: url('black_dot.png');
+  opacity: 0.55;
+}
+
+.rotate-btn {
+  background-size: 90% 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.rotate-btn:hover {
+  background-size: 100% 100%;
+  cursor: pointer;
+}
+
+.outcome-message-container {
+  text-align: center;
+  width: 50%;
+  border: 1px solid black;
+  margin: 0 auto;
+  .outcome-message {
+    margin: 3px;
+  }
+}
+
+.player-div {
+  border: 1px solid black;
+  text-align: center;
+  h3 {
+    margin: 3px;
+  }
+}
+
+.player-x {
+    background-color: white;
+    color: black;
+    // color: #00bfff;
+}
+
+.player-o {
+  background-color: #00bfff;
+  background-color: black;
+  color: white;
+}
+
+.game-room {
+  width: 90%;
+  margin: 0 auto;
+}
+
+#rotate-right-0, #rotate-left-2 {
+  float: left;
+  height: 100%;
+  width: 25%;
+}
+
+#rotate-right-1, #rotate-left-0 {
+  height: 25%;
+  width: 100%;
+}
+
+#rotate-right-2, #rotate-left-3 {
+  position: absolute;
+  bottom: 0;
+  height: 25%;
+  width: 100%;
+}
+
+#rotate-left-1, #rotate-right-3 {
+  float: right;
+  height: 100%;
+  width: 25%;
+}
+
+#rotate-right-0 {
+  background-image: url('top-left-arrow.png');
+}
+
+#rotate-right-1 {
+  background-image: url('right-top-arrow.png');
+}
+
+#rotate-right-2 {
+  background-image: url('left-bottom-arrow.png');
+}
+
+#rotate-right-3 {
+  background-image: url('bottom-right-arrow.png');
+}
+
+#rotate-left-0 {
+  background-image: url('left-top-arrow.png');
+}
+
+#rotate-left-1 {
+  background-image: url('top-right-arrow.png');
+}
+
+#rotate-left-2 {
+  background-image: url('bottom-left-arrow.png');
+}
+
+#rotate-left-3 {
+  background-image: url('right-bottom-arrow.png');
+}

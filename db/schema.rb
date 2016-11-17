@@ -13,7 +13,6 @@
 ActiveRecord::Schema.define(version: 20161111072835) do
 
   create_table "chat_rooms", force: :cascade do |t|
-    t.string   "title"
     t.integer  "match_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -28,6 +27,8 @@ ActiveRecord::Schema.define(version: 20161111072835) do
     t.integer  "playero_id"
     t.string   "outcome",       default: "N"
     t.integer  "winner"
+    t.integer  "xtimebank",     default: 300
+    t.integer  "otimebank",     default: 300
     t.datetime "created_at",                                                     null: false
     t.datetime "updated_at",                                                     null: false
   end

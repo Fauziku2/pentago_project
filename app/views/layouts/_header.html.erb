@@ -1,6 +1,6 @@
 
 
-<header class="navbar navbar-default navbar-fixed-top">
+<header class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -10,24 +10,55 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <%= link_to "Pentago Game", root_path, class: "navbar-brand" %>
+            <a class="navbar-brand" href="#">PENTA<span class="go">GO</span></a>
+            <!-- <%= link_to "Pentago Game", root_path, class: "navbar-brand" %> -->
         </div>
 
-        <div class="collapse navbar-collapse">
+          <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"></li>
+                <li class="nav-item"><a class="nav-link" href="/matches">Play</a></li>
+                <li class="nav-item"><a class="nav-link" href="/instructions">How to Play?</a></li>
             </ul>
+
+
+            <!-- <ul class="nav navbar-nav navbar-right">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hi, <%= current_user %><span class="glyphicon glyphicon-circle-arrow-down"></a></span>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+              </li>
+            </ul> -->
+
+
+
+            <!-- <ul class="nav navbar-nav navbar-right">
+              <li class="nav-item dropdown">
+
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink" role="button" aria-haspopup="true" aria-expanded="false">Hi, <%= current_user %> <span class="glyphicon glyphicon-circle-arrow-down"></a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a href="/profile">Profile</a></li>
+                  <li><a href="/edit" data-method="get">Edit Details</a></li>
+                  <li><a href="/logout" data-method="delete" rel="nofollow">Logout</a></li>
+                </ul>
+              </li>
+            </ul> -->
+
+
+
             <p class="navbar-text pull-right">
                 <% if user_signed_in? %>
-                Hi,
+               Hi,
                 <%= link_to current_user.name, profile_path, method: :get, class: "navbar-link" %>
                 ||
                 <%= link_to "Edit profile", edit_user_registration_path, method:
                 :get, class: "navbar-link" %>
                 <%= link_to "Logout", destroy_user_session_path, method:
                 :delete, class: "navbar-link" %>
-            <% else %>
-                <!-- I have logged out -->
+                <% else %>
+
                 <%= link_to "Register", new_user_registration_path, class: "navbar-link" %>
                 <%= link_to"Login", new_user_session_path, class: "navbar-link" %>
                 <% end %>

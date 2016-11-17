@@ -7,15 +7,28 @@
  *
  */
 
- .messages-table {
-   display: table;
-   width: 100%;
- }
-
  .message-wr {
    height: 70vh;
    margin: auto;
    width: 100%;
    border: 1px solid grey;
-  //  border-spacing: 5px;
+ }
+
+ .message-list {
+   list-style-type: none;
+   padding-left: 10px;
+ }
+
+ .message-container {
+   width: 95%;
+ }
+
+ #message_body {
+ }
+
+ #messages {
+   height: 100%;
+   overflow-x: hidden;
+   overflow-y: auto;
+   word-wrap: break-word;
  }

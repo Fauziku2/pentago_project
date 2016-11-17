@@ -9,17 +9,20 @@ $(document).on('turbolinks:load', function () {
   ]
 
   var gameRound = {
+    'id': 0,
     'gamestr': '',
     'currentplayer': '',
     'playerid': 0,
     'moveindex': '',
     'X': {
       'id': 0,
-      'fiveInARow': false
+      'fiveInARow': false,
+      'timebank': 0
     },
     'O': {
       'id': 0,
-      'fiveInARow': false
+      'fiveInARow': false,
+      'timebank': 0
     },
     'outcome': '',
     'winner': ''
@@ -28,6 +31,9 @@ $(document).on('turbolinks:load', function () {
   var $gameBoardContainer = $('.game-board-container')
   var $allGameSquare = $('.game-square')
   var $allRotateButtons = $('.rotate-btn')
+  var audioNotification = new Audio('/assets/pop.mp3')
+
+  $('.rotate-btn').hide()
 
   // Checking if you're on the gameboard page. Wraps entire JS
   if ($gameBoardContainer.data('game-room-id')) {
@@ -35,6 +41,7 @@ $(document).on('turbolinks:load', function () {
       url: window.location.pathname,
       dataType: 'json',
       success: function (obj) {
+        gameRound.id = obj.match.id
         gameRound.gamestr = obj.match.gameboard
         gameRound.moveindex = obj.match.moveindex
         gameRound.currentplayer = obj.match.currentplayer
@@ -43,14 +50,26 @@ $(document).on('turbolinks:load', function () {
         gameRound.outcome = obj.match.outcome
         gameRound.winner = obj.match.winner
         gameRound.playerid = obj.user
+        gameRound.X.timebank = obj.match.xtimebank
+        gameRound.O.timebank = obj.match.otimebank
+
+        $('.timebank-X-' + gameRound.id).text(gameRound.X.timebank)
+        $('.timebank-O-' + gameRound.id).text(gameRound.O.timebank)
 
         strToGameBoardArray(gameRound.gamestr)
         populateGameBoard()
         getOutcomeMessage()
-        if (gameRound.moveindex === 'A') {
+
+        //  If have opponent, is current player and move part A
+        if (gameRound.O.id && gameRound.moveindex === 'A' && gameRound.playerid === gameRound[gameRound.currentplayer].id) {
           addGameSquareListener()
-        } else if (gameRound.moveindex === 'B') {
+        } else if (gameRound.moveindex === 'B' && gameRound.playerid === gameRound[gameRound.currentplayer].id) {
           addRotateButtonListener()
+        }
+
+        // Continues to run countdown timer on refresh
+        if (gameRound.O.id && gameRound.outcome === 'N') {
+          countdownTimer()
         }
       }
     })
@@ -61,6 +80,11 @@ $(document).on('turbolinks:load', function () {
     }, {
       received: function (data) {
         // Gameround values from backend
+        if (gameRound.currentplayer !== data.currentplayer) {
+          audioNotification.play()
+        }
+
+        gameRound.id = data.id
         gameRound.gamestr = data.gameboard
         gameRound.moveindex = data.moveindex
         gameRound.currentplayer = data.currentplayer
@@ -69,24 +93,32 @@ $(document).on('turbolinks:load', function () {
         gameRound.outcome = data.outcome
         gameRound.winner = data.winner
 
+        gameRound.X.timebank = data.xtimebank
+        gameRound.O.timebank = data.otimebank
+
+        // When game player O joins and gameboard is empty. Added side effect of reminding first player to make a move. One time event
+        if (gameRound.O.id && gameRound.gamestr === '000000000000000000000000000000000000') {
+          audioNotification.play()
+        }
+
+        // Displays player O name on first join
+        $('.player-o-name').text(data.playeroname)
+
         strToGameBoardArray(data.gameboard)
         populateGameBoard()
         getOutcomeMessage()
-        if (gameRound.moveindex === 'A') {
-          addGameSquareListener()
-        } else if (gameRound.moveindex === 'B') {
-          addRotateButtonListener()
+
+        if (gameRound.outcome !== 'N') {
+          clearInterval(timer)
         }
 
-        // Data for validation
-        $('.gameboard-p').text(data.gameboard)
-        $('.moveindex-p').text(data.moveindex)
-        $('.currentplayer-p').text(data.currentplayer)
-        $('.player-me-p').text(data.playerid)
-        $('.player-x-p').text(data.playerx)
-        $('.player-o-p').text(data.playero)
-        $('.outcome-p').text(data.outcome)
-        $('.winner-p').text(data.winner)
+        if (gameRound.moveindex === 'A' && gameRound.playerid === gameRound[gameRound.currentplayer].id) {
+          clearInterval(timer)
+          countdownTimer()
+          addGameSquareListener()
+        } else if (gameRound.moveindex === 'B' && gameRound.playerid === gameRound[gameRound.currentplayer].id) {
+          addRotateButtonListener()
+        }
 
         // Updating form
         $('#match_gameboard').val(data.gameboard)
@@ -96,23 +128,57 @@ $(document).on('turbolinks:load', function () {
         $('#match_playero_id').val(data.playero)
         $('#match_outcome').val(data.outcome)
         $('#match_winner').val(data.winner)
+        $('#match_xtimebank').val(gameRound.X.timebank)
+        $('#match_otimebank').val(gameRound.O.timebank)
       }
     })
   }
 
+  var timer
+  function countdownTimer () {
+    timer = setInterval(function () {
+      if (gameRound[gameRound.currentplayer].timebank === 0) {
+        $('.timebank-' + gameRound.currentplayer + '-' + gameRound.id).text('Time\'s up!')
+        // Current player loses
+        if (gameRound.currentplayer === 'X') {
+          gameRound.outcome = 'O'
+          gameRound.winner = gameRound.O.id
+          gameRound.X.timebank = 0
+        } else {
+          gameRound.outcome = 'X'
+          gameRound.winner = gameRound.X.id
+          gameRound.O.timebank = 0
+        }
+        clearInterval(timer)
+        updateFormInputAndSubmit()
+      } else {
+        $('.timebank-' + gameRound.currentplayer + '-' + gameRound.id).text(gameRound[gameRound.currentplayer].timebank)
+        gameRound[gameRound.currentplayer].timebank -= 1
+
+        if (gameRound[gameRound.currentplayer].timebank % 12 === 0) {
+          updateFormInputAndSubmit()
+        }
+      }
+    }, 1000)
+  }
+
   function updateFormInputAndSubmit () {
-    var str = ''
+    gameRound.gamestr = ''
     for (var i = 0; i < 6; i++) {
-      str += gameBoard[i].join('')
+      gameRound.gamestr += gameBoard[i].join('')
     }
 
-    $('#match_gameboard').val(str)
+    $('#match_gameboard').val(gameRound.gamestr)
     $('#match_moveindex').val(gameRound.moveindex)
     $('#match_currentplayer').val(gameRound.currentplayer)
     $('#match_playerx_id').val(gameRound.X.id)
     $('#match_playero_id').val(gameRound.O.id)
     $('#match_outcome').val(gameRound.outcome)
     $('#match_winner').val(gameRound.winner)
+
+    $('#match_xtimebank').val(gameRound.X.timebank)
+    $('#match_otimebank').val(gameRound.O.timebank)
+
     $('.game-board-form').submit()
   }
 
@@ -122,12 +188,23 @@ $(document).on('turbolinks:load', function () {
       var $gameSquare = $('.game-square').eq(i)
       if (!$gameSquare.hasClass('X') && !$gameSquare.hasClass('O')) {
         $gameSquare.on('click', placeToken)
-      }
+
+        $gameSquare.hover(
+          function () {
+            $(this).addClass('hover' + gameRound.currentplayer)
+          },
+          function () {
+            $(this).removeClass('hoverX hoverO')
+          })
+        }
     }
   }
 
+
+
   function addRotateButtonListener () {
     // Assigns rotate tile function to each button using closure
+    $('.rotate-btn').show()
     for (var i = 0; i < 4; i++) {
       var $rotateRightBtn = $('#rotate-right-' + i)
       var $rotateLeftBtn = $('#rotate-left-' + i)
@@ -141,7 +218,8 @@ $(document).on('turbolinks:load', function () {
   }
 
   function placeToken () {
-    if (gameRound.playerid === gameRound[gameRound.currentplayer].id && gameRound.outcome === 'N') {
+    // If (I'm current player) && (game is ongoing) && (there is opponent for first move)
+    if (gameRound.playerid === gameRound[gameRound.currentplayer].id && gameRound.outcome === 'N' && gameRound.O.id) {
       // If cell is populated
       if (!$(this).hasClass('X') && !$(this).hasClass('O')) {
         // Gets rows and col index from HTML divs
@@ -153,7 +231,7 @@ $(document).on('turbolinks:load', function () {
         $(this).addClass(gameRound.currentplayer)
 
         $allGameSquare.off()
-        addRotateButtonListener()
+        $allGameSquare.removeClass('hoverX hoverO')
 
         toggleMoveIndex()
         checkWinCondition(xCoord, yCoord)
@@ -245,7 +323,8 @@ $(document).on('turbolinks:load', function () {
           }
         }
         $allRotateButtons.off()
-        addGameSquareListener()
+        $('.rotate-btn').hide()
+        // addGameSquareListener() // Handled by broadcast
 
         togglePlayer()
         toggleMoveIndex()
@@ -431,10 +510,12 @@ $(document).on('turbolinks:load', function () {
         outcomeMessage = 'White wins!'
         break
       case 'O':
-        outcomeMessage = 'Black wins!!'
+        outcomeMessage = 'Black wins!'
         break
       case 'N':
-        if (gameRound.currentplayer === 'X') {
+        if (!gameRound.O.id) {
+          outcomeMessage = 'Waiting for opponent...'
+        } else if (gameRound.currentplayer === 'X') {
           if (gameRound.moveindex === 'A') {
             outcomeMessage = 'White: Place a token'
           } else if (gameRound.moveindex === 'B') {
