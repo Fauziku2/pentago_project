@@ -2,13 +2,18 @@
   <div class="col-md-8">
 
       <h1>White:
-        <%= @match.playerx.name %>
+        <span class="player-x-name">
+          <%= @match.playerx.name %>
+        </span>
       </h1>
-      <% if @match.playero %>
+
       <h1>Black:
-        <%= @match.playero.name %>
+        <span class="player-o-name">
+          <% if @match.playero %>
+            <%= @match.playero.name %>
+          <% end %>
+        </span>
       </h1>
-      <% end %>
 
       <%= render 'hidden_gameboard_form' %>
       <%= render 'game_board' %>
