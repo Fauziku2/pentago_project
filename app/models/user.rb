@@ -39,7 +39,7 @@ class User < ApplicationRecord
 
   def WinningPercentage(userid)
     if TotalGames(userid) > 0
-      return (TotalWin(userid)/TotalGames(userid)*100)
+      return (TotalWin(userid).to_f/TotalGames(userid).to_f*100).to_f.round(2)
     end
   end
 
