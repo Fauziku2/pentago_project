@@ -33,6 +33,8 @@ $(document).on('turbolinks:load', function () {
   var $allRotateButtons = $('.rotate-btn')
   var audioNotification = new Audio('/assets/pop.mp3')
 
+  $('.rotate-btn').hide()
+
   // Checking if you're on the gameboard page. Wraps entire JS
   if ($gameBoardContainer.data('game-room-id')) {
     $.ajax({
@@ -57,12 +59,15 @@ $(document).on('turbolinks:load', function () {
         strToGameBoardArray(gameRound.gamestr)
         populateGameBoard()
         getOutcomeMessage()
-        if (gameRound.moveindex === 'A') {
+
+        //  If have opponent, is current player and move part A
+        if (gameRound.O.id && gameRound.moveindex === 'A' && gameRound.playerid === gameRound[gameRound.currentplayer].id) {
           addGameSquareListener()
-        } else if (gameRound.moveindex === 'B') {
+        } else if (gameRound.moveindex === 'B' && gameRound.playerid === gameRound[gameRound.currentplayer].id) {
           addRotateButtonListener()
         }
 
+        // Continues to run countdown timer on refresh
         if (gameRound.O.id && gameRound.outcome === 'N') {
           countdownTimer()
         }
@@ -91,6 +96,12 @@ $(document).on('turbolinks:load', function () {
         gameRound.X.timebank = data.xtimebank
         gameRound.O.timebank = data.otimebank
 
+        // When game player O joins and gameboard is empty. Added side effect of reminding first player to make a move. One time event
+        if (gameRound.O.id && gameRound.gamestr === '000000000000000000000000000000000000') {
+          audioNotification.play()
+        }
+
+        // Displays player O name on first join
         $('.player-o-name').text(data.playeroname)
 
         strToGameBoardArray(data.gameboard)
@@ -177,12 +188,23 @@ $(document).on('turbolinks:load', function () {
       var $gameSquare = $('.game-square').eq(i)
       if (!$gameSquare.hasClass('X') && !$gameSquare.hasClass('O')) {
         $gameSquare.on('click', placeToken)
-      }
+
+        $gameSquare.hover(
+          function () {
+            $(this).addClass('hover' + gameRound.currentplayer)
+          },
+          function () {
+            $(this).removeClass('hoverX hoverO')
+          })
+        }
     }
   }
 
+
+
   function addRotateButtonListener () {
     // Assigns rotate tile function to each button using closure
+    $('.rotate-btn').show()
     for (var i = 0; i < 4; i++) {
       var $rotateRightBtn = $('#rotate-right-' + i)
       var $rotateLeftBtn = $('#rotate-left-' + i)
@@ -209,7 +231,7 @@ $(document).on('turbolinks:load', function () {
         $(this).addClass(gameRound.currentplayer)
 
         $allGameSquare.off()
-        // addRotateButtonListener() // Handled by broadcast
+        $allGameSquare.removeClass('hoverX hoverO')
 
         toggleMoveIndex()
         checkWinCondition(xCoord, yCoord)
@@ -301,6 +323,7 @@ $(document).on('turbolinks:load', function () {
           }
         }
         $allRotateButtons.off()
+        $('.rotate-btn').hide()
         // addGameSquareListener() // Handled by broadcast
 
         togglePlayer()
@@ -487,10 +510,12 @@ $(document).on('turbolinks:load', function () {
         outcomeMessage = 'White wins!'
         break
       case 'O':
-        outcomeMessage = 'Black wins!!'
+        outcomeMessage = 'Black wins!'
         break
       case 'N':
-        if (gameRound.currentplayer === 'X') {
+        if (!gameRound.O.id) {
+          outcomeMessage = 'Waiting for opponent...'
+        } else if (gameRound.currentplayer === 'X') {
           if (gameRound.moveindex === 'A') {
             outcomeMessage = 'White: Place a token'
           } else if (gameRound.moveindex === 'B') {
