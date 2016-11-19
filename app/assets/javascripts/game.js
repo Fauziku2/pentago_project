@@ -60,6 +60,10 @@ $(document).on('turbolinks:load', function () {
         populateGameBoard()
         getOutcomeMessage()
 
+        if (gameRound[gameRound.currentplayer].timebank === 0) {
+          $('.timebank-' + gameRound.currentplayer + '-' + gameRound.id).text('Time\'s up!')
+        }
+
         //  If have opponent, is current player and move part A
         if (gameRound.O.id && gameRound.moveindex === 'A' && gameRound.playerid === gameRound[gameRound.currentplayer].id) {
           addGameSquareListener()
@@ -80,7 +84,7 @@ $(document).on('turbolinks:load', function () {
     }, {
       received: function (data) {
         // Gameround values from backend
-        if (gameRound.currentplayer !== data.currentplayer) {
+        if (gameRound.currentplayer !== data.currentplayer && (gameRound.playerid === gameRound.X.id || gameRound.playerid === gameRound.O.id)) {
           audioNotification.play()
         }
 
@@ -108,11 +112,18 @@ $(document).on('turbolinks:load', function () {
         populateGameBoard()
         getOutcomeMessage()
 
-        if (gameRound.outcome !== 'N') {
-          clearInterval(timer)
+        if (gameRound[gameRound.currentplayer].timebank === 0) {
+          $('.timebank-' + gameRound.currentplayer + '-' + gameRound.id).text('Time\'s up!')
         }
 
-        if (gameRound.moveindex === 'A' && gameRound.playerid === gameRound[gameRound.currentplayer].id) {
+        // Clear interval if game no longer playing on other boards
+        // Behaviour depending on move part A or B
+        if (gameRound.outcome !== 'N') {
+          clearInterval(timer)
+          $allGameSquare.off()
+          $allRotateButtons.off()
+          $('.rotate-btn').hide()
+        } else if (gameRound.moveindex === 'A' && gameRound.playerid === gameRound[gameRound.currentplayer].id) {
           clearInterval(timer)
           countdownTimer()
           addGameSquareListener()
@@ -133,7 +144,6 @@ $(document).on('turbolinks:load', function () {
       }
     })
   }
-
 
   var timer
   function countdownTimer () {
@@ -156,7 +166,7 @@ $(document).on('turbolinks:load', function () {
         $('.timebank-' + gameRound.currentplayer + '-' + gameRound.id).text(gameRound[gameRound.currentplayer].timebank)
         gameRound[gameRound.currentplayer].timebank -= 1
 
-        if (gameRound[gameRound.currentplayer].timebank % 12 === 0) {
+        if (gameRound[gameRound.currentplayer].timebank % 12 === 0 && (gameRound.playerid === gameRound.X.id || gameRound.playerid === gameRound.O.id)) {
           updateFormInputAndSubmit()
         }
       }
