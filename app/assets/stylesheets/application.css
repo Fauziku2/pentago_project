@@ -65,15 +65,8 @@ on
 
 body{
   margin:0;
-  background:red;
+  background: #770d18;
   animation-name: change_BgColor;
   animation-duration: 10s;
   animation-iteration-count: infinite;
-}
-@keyframes change_BgColor {
-    0%   {background-color: #10e88a;}
-    25%  {background-color: #7f3995;}
-    50%  {background-color: #0d78e7;}
-    75%  {background-color: #f88f18;}
-    100% {background-color: #bb6774;}
 }

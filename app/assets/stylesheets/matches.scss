@@ -2,19 +2,68 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.availableMatch {
+
+
+.create-game-btn {
+  position: relative;
+  bottom: 45px;
+  right: 10px;
+  float: right;
+}
+
+.matches-header {
   text-align: center;
+  height: 90px;
+  h2 {
+
+  }
+}
+
+.panel-container {
+  height: 60px;
+  transition: 0.3s;
+  border: none;
+  &:hover {
+    background-color: darkslategray;
+    transition: 0.3s;
+    .challenge-btn {
+      opacity: 1;
+      transition: 0.3s;
+    }
+    .watch-game-btn {
+      opacity: 1;
+      transition: 0.3s;
+    }
+  }
+  .challenge-btn {
+    position: relative;
+    bottom: 42px;
+    width: 100px;
+    opacity: 0;
+    transition: 0.3s;
+  }
+  .watch-game-btn {
+    position: relative;
+    bottom: 42px;
+    width: 200px;
+    opacity: 0;
+    transition: 0.3s;
+    .watch-game-link {
+      color: white;
+      text-decoration: none;
+    }
+  }
 }
 
 .row.matchPage {
-  // border: 1px solid black;
   margin: 0 auto;
 }
 
 .nameMatch {
-  // text-align: center;
+  // color: white;
+  font-size: 18px;
 }
 
-.nameWatch {
-  color: white;
+.matches-container {
+  text-align: center;
 }

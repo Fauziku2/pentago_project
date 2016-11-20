@@ -1,32 +1,30 @@
 <!-- <%= render 'hidden_create_form' %> -->
-<div class="jumbotron">
+<!-- <div class="jumbotron">
   <div class="container">
     <h1>Are You Game!</h1>
     <p>...</p>
-    <p><%= render 'hidden_create_form' %></p>
   </div>
-</div>
+</div> -->
 
 <div class="container">
 
-
-<div class = "well well-sm availableMatch"><h2>Available Matches</h2></div>
-
+  <div class = "well well-sm matches-header">
+    <h2>Available Matches</h2>
+    <span class="create-game-btn"><%= render 'hidden_create_form' %></span>
+  </div>
 
   <div class="row">
     <% if @availablematches %>
     <% @availablematches.each do |match| %>
-      <div class="col-md-3 playColumn">
+      <div class="col-md-2 matches-container">
 
-        <div class="panel panel-default">
+        <div class="panel panel-default panel-container">
 
-          <div class="panel-heading">Play Game</div>
             <div class="panel-body">
 
-              <p class="nameMatch">Player 1: <%= match.playerx.name %></p>
+              <p class="nameMatch"><%= match.playerx.name %></p>
 
-              <%= button_to("Challenge!", challenge_match_path(match), :method => :patch, class: "btn btn-danger btn-sm" ) %>
-
+              <%= button_to("Challenge!", challenge_match_path(match), :method => :patch, class: "btn btn-danger btn-sm challenge-btn" ) %>
             </div>
           </div>
         </div>
@@ -34,27 +32,26 @@
       <% end %>
   </div>
 
-<div class = "well well-sm availableMatch"><h2>Live Matches</h2></div>
+  <div class = "well well-sm matches-header"><h2>Live Matches</h2></div>
 
-<div class="row">
-  <% if @livematches %>
-    <% @livematches.each do |match| %>
-      <div class="col-md-3">
-        <div class="panel panel-default">
-          <div class="panel-heading">Watch Game</div>
-            <div class="panel-body">
-              <p>Player 1: <%= match.playerx.name %></p>
-              <p>Player 2: <%= match.playero.name %></p>
-              <div class="btn btn-sm btn-warning">
-                <%= link_to 'Watch Game', match_path(match), :class => "nameWatch" %>
+  <div class="row">
+    <% if @livematches %>
+      <% @livematches.each do |match| %>
+        <div class="col-md-3 matches-container">
+          <div class="panel panel-default panel-container">
+            <!-- <div class="panel-heading">Watch Game</div> -->
+              <div class="panel-body">
+                <p class="nameMatch"><%= match.playerx.name %> VS <%= match.playero.name %></p>
+                <div class="btn btn-sm btn-warning watch-game-btn">
+                  <%= link_to 'Watch Game', match_path(match), :class => "watch-game-link" %>
+                </div>
               </div>
-            </div>
+
+          </div>
 
         </div>
-
-      </div>
+        <% end %>
       <% end %>
-    <% end %>
-</div>
+  </div>
 
 </div>

@@ -1,10 +1,10 @@
-<div class="container">
+<div class="game-room-container">
 
     <div class="game-room row">
 
         <div class="col-md-8">
 
-            <div class="outcome-message-container">
+            <div class="outcome-message-container jumbotron">
                 <h3 class='outcome-message'></h3>
             </div>
 
@@ -13,33 +13,41 @@
 
             <div class="player-dashboard row">
 
-                <div class="player-div player-x col-md-6">
-                    <h3>White:
-                        <span class="player-x-name">
-                            <%= @match.playerx.name %>
-                        </span>
-                    </h3>
-                    <h3>Timer:
-                        <span class="timebank-X timebank-X-<%= @match.id %>"></span>
-                    </h3>
-                </div>
+              <div class="col-md-6">
+                <div class="player-div player-x-dashboard">
 
-                <div class="player-div player-o col-md-6">
-                    <h3>Black:
-                        <span class="player-o-name">
-                            <% if @match.playero %>
-                            <%= @match.playero.name %>
-                            <% end %>
-                        </span>
-                    </h3>
-                    <h3>Timer:
+                  <p>White:
+                    <%= @match.playerx.name %>
+                  </p>
+                  <p>Timer:
+                    <span class="timebank-X timebank-X-<%= @match.id %>"></span>
+                  </p>
+
+                </div>
+              </div>
+
+
+                  <div class="col-md-6">
+                    <div class="player-div player-o-dashboard">
+
+                      <p>Black:
+                        <% if @match.playero %>
+                        <%= @match.playero.name %>
+                        <% else %>
+                        Waiting for opponent...
+                        <% end %>
+                      </p>
+                      <p>Timer:
                         <span class="timebank-O timebank-O-<%= @match.id %>"></span>
-                    </h3>
+                      </p>
+                    </div>
+
+                  </div>
+
                 </div>
 
             </div>
 
-        </div>
 
         <div class="col-md-4">
 
