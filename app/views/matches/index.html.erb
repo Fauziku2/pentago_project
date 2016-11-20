@@ -41,15 +41,15 @@
             <ul class="challengeList">
               <li><%= match.playerx.name  %></li>
               <li><%= match.playero.name  %></li>
-
-        <div class="btn btn-small btn-warning">
-          <%= link_to 'Watch Game', match_path(match) %><br>
+              <li>
+                <div class="btn btn-sm btn-warning">
+                  <%= link_to 'Watch Game', match_path(match), :class => "nameWatch" %>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-        </ul>
-      </div>
       <% end %>
     <% end %>
-
-  </div>
   </div>
 </div>
