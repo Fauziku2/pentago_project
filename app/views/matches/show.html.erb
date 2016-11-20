@@ -1,60 +1,62 @@
-<div class="game-room row">
+<div class="container">
 
-  <div class="col-md-8">
+    <div class="game-room row">
 
-    <div class="outcome-message-container">
-      <h3 class='outcome-message'></h3>
+        <div class="col-md-8">
+
+            <div class="outcome-message-container">
+                <h3 class='outcome-message'></h3>
+            </div>
+
+            <%= render 'hidden_gameboard_form' %>
+            <%= render 'game_board' %>
+
+            <div class="player-dashboard row">
+
+                <div class="player-div player-x col-md-6">
+                    <h3>White:
+                        <span class="player-x-name">
+                            <%= @match.playerx.name %>
+                        </span>
+                    </h3>
+                    <h3>Timer:
+                        <span class="timebank-X timebank-X-<%= @match.id %>"></span>
+                    </h3>
+                </div>
+
+                <div class="player-div player-o col-md-6">
+                    <h3>Black:
+                        <span class="player-o-name">
+                            <% if @match.playero %>
+                            <%= @match.playero.name %>
+                            <% end %>
+                        </span>
+                    </h3>
+                    <h3>Timer:
+                        <span class="timebank-O timebank-O-<%= @match.id %>"></span>
+                    </h3>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="message-wr">
+                <div id="messages" class="messages" data-chat-room-id="<%= @chat_room.id %>">
+                    <%= render @chat_room.messages %>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <%= form_for @message, url: '#' do |f| %>
+                <%= hidden_field_tag 'chat_room_id', @chat_room.id %>
+                <%= f.text_area :body, class: 'form-control' %>
+                <% end %>
+            </div>
+
+        </div>
+
     </div>
-
-
-    <%= render 'hidden_gameboard_form' %>
-    <%= render 'game_board' %>
-
-    <div class="player-dashboard row">
-
-      <div class="player-div player-x col-md-6">
-        <h3>White:
-          <span class="player-x-name">
-            <%= @match.playerx.name %>
-          </span>
-        </h3>
-        <h3>Timer:
-          <span class="timebank-X timebank-X-<%= @match.id %>"></span>
-        </h3>
-      </div>
-
-      <div class="player-div player-o col-md-6">
-        <h3>Black:
-          <span class="player-o-name">
-            <% if @match.playero %>
-            <%= @match.playero.name %>
-            <% end %>
-          </span>
-        </h3>
-        <h3>Timer:
-          <span class="timebank-O timebank-O-<%= @match.id %>"></span>
-        </h3>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="col-md-4">
-
-    <div class="message-wr">
-      <div id="messages" class="messages" data-chat-room-id="<%= @chat_room.id %>">
-        <%= render @chat_room.messages %>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <%= form_for @message, url: '#' do |f| %>
-        <%= hidden_field_tag 'chat_room_id', @chat_room.id %>
-        <%= f.text_area :body, class: 'form-control' %>
-      <% end %>
-    </div>
-
-  </div>
-
 </div>

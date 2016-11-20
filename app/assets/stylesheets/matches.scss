@@ -6,35 +6,6 @@
   text-align: center;
 }
 
-.newMatch {
-  margin: 0 auto;
-  padding: 0 2%;
-  // border: 1px solid black;
-  width: 20%;
-  float: left;
-  padding-bottom: 5px;
-}
-
-.match-container {
-  width: 90%;
-  margin: 0 auto;
-}
-
-.challengeMatch {
-}
-
-.single-match-container {
-  width: 100%;
-  margin: 0 auto;
-  background:rgba(0, 0, 0, 0.05);
-  border-radius: 5px;
-  padding: 10px;
-  &:hover {
-    background-color: grey;
-    opacity: 0.5;
-  }
-}
-
 .row.matchPage {
   // border: 1px solid black;
   margin: 0 auto;
@@ -44,14 +15,6 @@
   // text-align: center;
 }
 
-.asdf {
-  margin: 0 auto;
-}
-
 .nameWatch {
   color: white;
-}
-
-.btn-sm {
-  padding: 5px 5px;
 }

@@ -1,70 +1,73 @@
-<% provide(:title, "Profile Page") %>
-<div>
-  <h1 class="statHead">Hi <%= current_user.name%>, your online statistics:</h1>
-</div>
+<div class="container">
 
-<table class="table table-striped">
-  <thead>
-    <tr>
+    <% provide(:title, "Profile Page") %>
+    <div>
+        <h1 class="statHead">Hi
+            <%= current_user.name%>, your online statistics:</h1>
+    </div>
 
-      <th><h3>Description:</h3></th>
-      <th><h3>Remarks:</h3></th>
+    <table class="table table-striped">
+        <thead>
+            <tr>
 
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
+                <th>
+                    <h3>Description:</h3>
+                </th>
+                <th>
+                    <h3>Remarks:</h3>
+                </th>
 
-      <!-- <th scope="row"></th> -->
-      <td>Total Games Played:</td>
-      <td><%=current_user.TotalGames(current_user.id)%></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
 
-    </tr>
-    <tr>
+                <!-- <th scope="row"></th> -->
+                <td>Total Games Played:</td>
+                <td><%=current_user.TotalGames(current_user.id)%></td>
 
-      <!-- <th scope="row"></th> -->
-      <td>Total Games Won:</td>
-      <td><%=current_user.TotalWin(current_user.id)%></td>
+            </tr>
+            <tr>
 
-    </tr>
-    <tr>
-      <!-- <th scope="row"></th> -->
-      <td>Total Games Lost:</td>
-      <td><%=current_user.AllLost(current_user.id)%></td>
+                <!-- <th scope="row"></th> -->
+                <td>Total Games Won:</td>
+                <td><%=current_user.TotalWin(current_user.id)%></td>
 
-    </tr>
+            </tr>
+            <tr>
+                <!-- <th scope="row"></th> -->
+                <td>Total Games Lost:</td>
+                <td><%=current_user.AllLost(current_user.id)%></td>
 
-    <tr>
-      <!-- <th scope="row"></th> -->
-      <td>Total Games Draw:</td>
-      <td><%=current_user.AllDraw(current_user.id)%></td>
+            </tr>
 
-    </tr>
+            <tr>
+                <!-- <th scope="row"></th> -->
+                <td>Total Games Draw:</td>
+                <td><%=current_user.AllDraw(current_user.id)%></td>
 
-    <tr>
-      <!-- <th scope="row"></th> -->
-      <td>Winning Percentage (%):</td>
-      <td><%= current_user.WinningPercentage(current_user.id)%></td>
+            </tr>
 
-    </tr>
+            <tr>
+                <!-- <th scope="row"></th> -->
+                <td>Winning Percentage (%):</td>
+                <td><%= current_user.WinningPercentage(current_user.id)%></td>
 
-    <tr>
-      <!-- <th scope="row"></th> -->
-      <td>Player Level:</td>
-      <td><%=current_user.PlayerLevel(current_user.id)%></td>
+            </tr>
 
-    </tr>
+            <tr>
+                <!-- <th scope="row"></th> -->
+                <td>Player Level:</td>
+                <td><%=current_user.PlayerLevel(current_user.id)%></td>
 
+            </tr>
 
-  </tbody>
-</table>
+        </tbody>
+    </table>
 
-<%= link_to "Edit profile", edit_user_registration_path, method:
+    <%= link_to "Edit profile", edit_user_registration_path, method:
 :get, class: "btn btn-danger" %>
-
-
-
-
+</div>
 
 <!--
 <div class="container-fluid">
