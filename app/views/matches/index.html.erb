@@ -9,13 +9,9 @@
 
       <div class="newMatch">
         <div class="single-match-container">
-          <ul class="challengeList">
-            <li class="nameMatch"><%= match.playerx.name  %></li>
+            <p class="nameMatch"><%= match.playerx.name  %></p>
 
-            <!-- <%= link_to 'Destroy', match_path(match),
-            method: :delete, data: { confirm: 'Are you sure?' } %> -->
-            <li class="challengeMatch"><%= button_to("Challenge!", challenge_match_path(match), :method => :patch, class: "btn btn-danger btn-sm" ) %></li>
-          </ul>
+            <p class="challengeMatch"><%= button_to("Challenge!", challenge_match_path(match), :method => :patch, class: "btn btn-danger btn-sm" ) %></p>
           <!-- <%= link_to("Challenge!", challenge_match_path(match), :method => :patch) %> -->
         </div>
       </div>
@@ -38,15 +34,13 @@
     <% @livematches.each do |match| %>
       <div class="newMatch">
         <div class="single-match-container">
-            <ul class="challengeList">
-              <li><%= match.playerx.name  %></li>
-              <li><%= match.playero.name  %></li>
-              <li>
+              <p><%= match.playerx.name  %></p>
+              <p><%= match.playero.name  %></p>
+              <p>
                 <div class="btn btn-sm btn-warning">
                   <%= link_to 'Watch Game', match_path(match), :class => "nameWatch" %>
                 </div>
-              </li>
-            </ul>
+              </p>
           </div>
         </div>
       <% end %>

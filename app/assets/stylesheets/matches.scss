@@ -20,17 +20,19 @@
   margin: 0 auto;
 }
 
+.challengeMatch {
+}
+
 .single-match-container {
   width: 100%;
   margin: 0 auto;
-  // border: 1px solid black;
   background:rgba(0, 0, 0, 0.05);
   border-radius: 5px;
   padding: 10px;
-}
-
-.challengeList {
-  list-style-type: none;
+  &:hover {
+    background-color: grey;
+    opacity: 0.5;
+  }
 }
 
 .row.matchPage {

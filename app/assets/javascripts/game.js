@@ -33,6 +33,7 @@ $(document).on('turbolinks:load', function () {
   var $allRotateButtons = $('.rotate-btn')
   var audioNotification = new Audio('/assets/pop.mp3')
 
+  // Default hidden, will show if it's move B
   $('.rotate-btn').hide()
 
   // Checking if you're on the gameboard page. Wraps entire JS
