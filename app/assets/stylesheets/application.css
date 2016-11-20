@@ -13,7 +13,7 @@
  *= require_tree .
  *= require_self
  */
- body { padding-top: 65px; }
+ body { padding-top: 58px; }
  footer { bottom: 0; }
  table, td, th { vertical-align: middle; border:none;}
  th {border-bottom: 1px solid #DDD;}
@@ -61,4 +61,19 @@ on
   text-align: center;
   font-weight: bold
 
+}
+
+body{
+  margin:0;
+  background:red;
+  animation-name: change_BgColor;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+}
+@keyframes change_BgColor {
+    0%   {background-color: #10e88a;}
+    25%  {background-color: #7f3995;}
+    50%  {background-color: #0d78e7;}
+    75%  {background-color: #f88f18;}
+    100% {background-color: #bb6774;}
 }
