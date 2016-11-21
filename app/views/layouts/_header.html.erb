@@ -23,6 +23,38 @@
                 <li class="nav-item"><a class="nav-link" href="/instructions">How to Play?</a></li>
             </ul>
 
+            <ul class="nav navbar-nav navbar-right">
+
+                <% if user_signed_in? %>
+
+                  <li class="nav-item navText"><a class="nav-link" href="/profile"><%= current_user.name %></a></li>
+                  <li><%= link_to "Logout", destroy_user_session_path, method: :delete, class: "navbar-link" %></li>
+
+                  <% else %>
+
+                  <li><%= link_to "Register", new_user_registration_path, class: "navbar-link" %></li>
+                  <li><%= link_to"Login", new_user_session_path, class: "navbar-link" %></li>
+
+                  <% end %>
+
+                </ul>
+              </li>
+            </ul>
+
+            <!-- <p class="navbar-text pull-right">
+                <% if user_signed_in? %>
+                <%= link_to current_user.name, profile_path, method: :get, class: "navbar-link" %>
+
+                <%= link_to "Logout", destroy_user_session_path, method:
+                :delete, class: "navbar-link" %>
+
+                <% else %>
+                <%= link_to "Register", new_user_registration_path, class: "navbar-link" %>
+                <%= link_to"Login", new_user_session_path, class: "navbar-link" %>
+
+                <% end %>
+            </p> -->
+
 
             <!-- <ul class="nav navbar-nav navbar-right">
               <li class="nav-item dropdown">
@@ -37,14 +69,11 @@
 
 
 
-            <ul class="nav navbar-nav navbar-right">
-              <li class="nav-item dropdown">
+            <!-- <ul class="nav navbar-nav navbar-right">
+
                 <% if user_signed_in? %>
 
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink" role="button" aria-haspopup="true" aria-expanded="false">Hi, <%= current_user.name %> <span class="glyphicon glyphicon-circle-arrow-down"></a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a href="/profile">Profile</a></li>
-                  <li><a href="/edit" data-method="get">Edit Details</a></li>
+                  <li class="nav-item navText"><a class="nav-link" href="/profile"><%= current_user%></a></li>
                   <li><%= link_to "Logout", destroy_user_session_path, method: :delete, class: "navbar-link" %></li>
                   <% else %>
                   <li><%= link_to "Register", new_user_registration_path, class: "navbar-link" %></li>
@@ -52,20 +81,21 @@
                   <% end %>
                 </ul>
               </li>
-            </ul>
+            </ul> -->
 
 
 
             <!-- <p class="navbar-text pull-right">
                 <% if user_signed_in? %>
                 <%= link_to current_user.name, profile_path, method: :get, class: "navbar-link" %>
-                ||
+
                 <%= link_to "Logout", destroy_user_session_path, method:
                 :delete, class: "navbar-link" %>
-                <% else %>
 
+                <% else %>
                 <%= link_to "Register", new_user_registration_path, class: "navbar-link" %>
                 <%= link_to"Login", new_user_session_path, class: "navbar-link" %>
+
                 <% end %>
             </p> -->
         </div>
