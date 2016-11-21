@@ -17,12 +17,26 @@
  footer { bottom: 0; }
  table, td, th { vertical-align: middle; border:none;}
  th {border-bottom: 1px solid #DDD;}
-on
+
  .navbar-inverse .navbar-brand {
      color: white;
-     font-family: 'Patua One', cursive;
+     /*font-family: 'Patua One', cursive;*/
      font-size: 25px;
+     font-weight: bold;
      letter-spacing: 5px;
+ }
+
+.navText {
+  color: white;
+}
+
+ .navbar-inverse .navbar-nav > li:hover {
+   background-color: #00bfff;
+   color: white;
+ }
+
+ .logo {
+   padding: 11px;
  }
 
  .go {
