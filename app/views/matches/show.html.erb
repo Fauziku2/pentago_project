@@ -31,11 +31,13 @@
                     <div class="player-div player-o-dashboard">
 
                       <p>Black:
-                        <% if @match.playero %>
-                        <%= @match.playero.name %>
-                        <% else %>
-                        Waiting for opponent...
-                        <% end %>
+                        <span class="player-o-name">
+                          <% if @match.playero %>
+                          <%= @match.playero.name %>
+                          <% else %>
+                          Waiting for opponent...
+                          <% end %>
+                        </span>
                       </p>
                       <p>Timer:
                         <span class="timebank-O timebank-O-<%= @match.id %>"></span>
