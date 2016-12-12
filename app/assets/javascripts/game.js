@@ -329,9 +329,15 @@ $(document).on('turbolinks:load', function () {
             }
             // counter to loop through the gameSquareTile array
             counter += 1
+          }
+        }
+
+        for (var i = x; i < x + 3; i++) {
+          for (var j = y; j < y + 3; j++) {
             checkWinCondition(i, j)
           }
         }
+        
         $allRotateButtons.off()
         $('.rotate-btn').hide()
         // addGameSquareListener() // Handled by broadcast
